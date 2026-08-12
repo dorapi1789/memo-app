@@ -1,3 +1,4 @@
+
 import streamlit as st
 import sqlite3
 from datetime import datetime
@@ -82,7 +83,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   メモタイトル
+   メモタイトルボタン
    ========================================================= */
 
 .memo-title-button {
@@ -153,9 +154,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
     justify-content: center !important;
 
-    /*
-       ★ チェックボックスを少し上へ
-    */
+    /* チェックボックスを少し上へ */
     transform: translateY(-5px) !important;
 }
 
@@ -165,11 +164,11 @@ div[data-testid="stHorizontalBlock"] > div {
    ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] {
-    width: 52px !important;
+    width: 54px !important;
 
-    min-width: 52px !important;
+    min-width: 54px !important;
 
-    height: 52px !important;
+    height: 54px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -187,11 +186,11 @@ div[data-testid="stHorizontalBlock"] > div {
    ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] > label {
-    width: 52px !important;
+    width: 54px !important;
 
-    min-width: 52px !important;
+    min-width: 54px !important;
 
-    height: 52px !important;
+    height: 54px !important;
 
     margin: 0 !important;
 
@@ -208,21 +207,21 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   ★ チェックボックス本体 42px
+   チェックボックス本体
    ========================================================= */
 
 .item-check input[type="checkbox"] {
     appearance: none !important;
     -webkit-appearance: none !important;
 
-    width: 42px !important;
-    height: 42px !important;
+    width: 50px !important;
+    height: 50px !important;
 
-    min-width: 42px !important;
-    min-height: 42px !important;
+    min-width: 50px !important;
+    min-height: 50px !important;
 
-    max-width: 42px !important;
-    max-height: 42px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -279,7 +278,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   Streamlit側の余白
+   Streamlit側の余白を削除
    ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] > label > div {
@@ -289,7 +288,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   項目名
+   ★ 項目名
    ========================================================= */
 
 .memo-text {
@@ -301,7 +300,10 @@ div[data-testid="stHorizontalBlock"] > div {
 
     margin: 0 !important;
 
-    padding: 5px 4px !important;
+    /*
+       項目名を少し下へ
+    */
+    padding: 8px 4px 2px 4px !important;
 
     font-size: 15px !important;
 
@@ -311,12 +313,22 @@ div[data-testid="stHorizontalBlock"] > div {
 
     align-items: center !important;
 
+    /*
+       ★ 項目名だけ3px下へ
+    */
+    transform: translateY(3px) !important;
+
     word-break: break-word !important;
 
     overflow-wrap: anywhere !important;
 
     white-space: normal !important;
 }
+
+
+/* =========================================================
+   完了した項目
+   ========================================================= */
 
 .memo-text.completed {
     text-decoration: line-through !important;
@@ -326,7 +338,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   ★ 削除ボタン
+   削除ボタン
    ========================================================= */
 
 .item-delete {
@@ -345,17 +357,13 @@ div[data-testid="stHorizontalBlock"] > div {
 
     justify-content: center !important;
 
-    /*
-       削除ボタンを少し上に
-    */
     transform: translateY(-1px) !important;
 }
 
 
-/*
-   ★ 削除ボタン本体
-   横書きになるよう幅を確保
-*/
+/* =========================================================
+   削除ボタン本体
+   ========================================================= */
 
 .item-delete button {
     width: 62px !important;
@@ -390,9 +398,9 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
-   Streamlitボタン内部
-*/
+/* =========================================================
+   削除ボタン内部
+   ========================================================= */
 
 .item-delete button > div {
     width: 100% !important;
@@ -413,9 +421,9 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
+/* =========================================================
    「削除」の文字
-*/
+   ========================================================= */
 
 .item-delete button p {
     width: 100% !important;
@@ -535,11 +543,18 @@ div[data-testid="stHorizontalBlock"] > div {
 
     .memo-text {
         font-size: 15px !important;
+
+        /*
+           スマホでも項目名を少し下へ
+        */
+        transform: translateY(3px) !important;
     }
 
     .item-delete button {
         width: 62px !important;
+
         min-width: 62px !important;
+
         max-width: 62px !important;
 
         white-space: nowrap !important;
@@ -1375,3 +1390,4 @@ with st.expander(
 st.divider()
 
 st.caption("📝 かんたんメモ")
+
