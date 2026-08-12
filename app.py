@@ -115,6 +115,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
+```css
 /* =========================================================
    項目行
    ========================================================= */
@@ -124,7 +125,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
     min-width: 0 !important;
 
-    height: 48px !important;
+    height: 52px !important;
 
     display: flex !important;
 
@@ -143,7 +144,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
     min-width: 0 !important;
 
-    height: 48px !important;
+    height: 52px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -153,19 +154,24 @@ div[data-testid="stHorizontalBlock"] > div {
     align-items: center !important;
 
     justify-content: center !important;
+
+    /*
+       ★ 少し上へ移動
+    */
+    transform: translateY(-3px) !important;
 }
 
 
-/*
-   Streamlit checkbox 本体の位置をリセット
-*/
+/* =========================================================
+   チェックボックスの外側
+   ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] {
-    width: 48px !important;
+    width: 52px !important;
 
-    min-width: 48px !important;
+    min-width: 52px !important;
 
-    height: 48px !important;
+    height: 52px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -178,16 +184,16 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
-   label全体
-*/
+/* =========================================================
+   label
+   ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] > label {
-    width: 48px !important;
+    width: 52px !important;
 
-    min-width: 48px !important;
+    min-width: 52px !important;
 
-    height: 48px !important;
+    height: 52px !important;
 
     margin: 0 !important;
 
@@ -203,29 +209,30 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
-   ★ チェックボックスを36pxに大型化
-*/
+/* =========================================================
+   ★ チェックボックス本体
+   36px → 42px
+   ========================================================= */
 
 .item-check input[type="checkbox"] {
     appearance: none !important;
     -webkit-appearance: none !important;
 
-    width: 36px !important;
-    height: 36px !important;
+    width: 42px !important;
+    height: 42px !important;
 
-    min-width: 36px !important;
-    min-height: 36px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
 
-    max-width: 36px !important;
-    max-height: 36px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
 
     margin: 0 !important;
     padding: 0 !important;
 
     border: 2px solid #777 !important;
 
-    border-radius: 6px !important;
+    border-radius: 7px !important;
 
     background: white !important;
 
@@ -239,9 +246,9 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
-   チェックされた状態
-*/
+/* =========================================================
+   チェック済み
+   ========================================================= */
 
 .item-check input[type="checkbox"]:checked {
     background: #555 !important;
@@ -250,9 +257,9 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
+/* =========================================================
    チェックマーク
-*/
+   ========================================================= */
 
 .item-check input[type="checkbox"]:checked::after {
     content: "✓" !important;
@@ -266,7 +273,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
     color: white !important;
 
-    font-size: 25px !important;
+    font-size: 29px !important;
 
     font-weight: bold !important;
 
@@ -274,236 +281,16 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/*
-   チェックボックス周辺のStreamlit余白を削除
-*/
+/* =========================================================
+   Streamlit側の余白を完全にリセット
+   ========================================================= */
 
 .item-check div[data-testid="stCheckbox"] > label > div {
     margin: 0 !important;
     padding: 0 !important;
 }
+```
 
-
-/* =========================================================
-   項目名
-   ========================================================= */
-
-.memo-text {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    min-height: 48px !important;
-
-    margin: 0 !important;
-
-    padding: 5px 4px !important;
-
-    font-size: 15px !important;
-
-    line-height: 1.45 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    word-break: break-word !important;
-
-    overflow-wrap: anywhere !important;
-
-    white-space: normal !important;
-}
-
-.memo-text.completed {
-    text-decoration: line-through !important;
-
-    opacity: 0.45 !important;
-}
-
-
-/* =========================================================
-   削除ボタン
-   ========================================================= */
-
-.item-delete {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    height: 48px !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-}
-
-.item-delete button {
-    width: 54px !important;
-
-    min-width: 54px !important;
-
-    max-width: 54px !important;
-
-    height: 36px !important;
-
-    min-height: 36px !important;
-
-    max-height: 36px !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    text-align: center !important;
-
-    line-height: 1 !important;
-
-    white-space: nowrap !important;
-}
-
-.item-delete button > div {
-    width: 100% !important;
-
-    height: 100% !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-}
-
-.item-delete button p {
-    width: 100% !important;
-
-    height: 100% !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    line-height: 1 !important;
-
-    text-align: center !important;
-}
-
-
-/* =========================================================
-   項目追加
-   ========================================================= */
-
-.add-input {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-}
-
-.add-input input {
-    width: 100% !important;
-
-    max-width: 100% !important;
-
-    box-sizing: border-box !important;
-}
-
-
-/* =========================================================
-   ＋ボタン
-   ========================================================= */
-
-.add-button {
-    width: 100% !important;
-
-    height: 100% !important;
-
-    min-width: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-}
-
-.add-button button {
-    width: 40px !important;
-
-    min-width: 40px !important;
-
-    max-width: 40px !important;
-
-    height: 40px !important;
-
-    min-height: 40px !important;
-
-    max-height: 40px !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    text-align: center !important;
-
-    line-height: 1 !important;
-}
-
-
-/* =========================================================
-   スマホ
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    .block-container {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-
-    div[data-testid="stHorizontalBlock"] {
-        gap: 3px !important;
-    }
-
-    .memo-text {
-        font-size: 15px !important;
-    }
-
-}
 
 </style>
 """, unsafe_allow_html=True)
