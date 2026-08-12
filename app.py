@@ -24,7 +24,7 @@ st.markdown("""
 <style>
 
 /* =========================================================
-   画面全体
+   基本設定
    ========================================================= */
 
 html,
@@ -35,19 +35,16 @@ body {
     overflow-x: hidden !important;
 }
 
-
 [data-testid="stAppViewContainer"] {
     width: 100% !important;
     overflow-x: hidden !important;
 }
-
 
 [data-testid="stAppViewBlockContainer"] {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: hidden !important;
 }
-
 
 .block-container {
     width: 100% !important;
@@ -64,7 +61,7 @@ body {
 
 
 /* =========================================================
-   横方向コンテナ
+   Streamlitの横並び
    ========================================================= */
 
 div[data-testid="stHorizontalBlock"] {
@@ -75,11 +72,10 @@ div[data-testid="stHorizontalBlock"] {
 
     flex-wrap: nowrap !important;
 
-    overflow: hidden !important;
-
     align-items: center !important;
-}
 
+    overflow: hidden !important;
+}
 
 div[data-testid="stHorizontalBlock"] > div {
     min-width: 0 !important;
@@ -97,7 +93,6 @@ div[data-testid="stHorizontalBlock"] > div {
     margin: 0 !important;
     padding: 0 !important;
 }
-
 
 .memo-title-button button {
     width: auto !important;
@@ -121,7 +116,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   メモボタンの間隔
+   メモタイトル同士の余白
    ========================================================= */
 
 div[data-testid="element-container"]:has(
@@ -134,39 +129,26 @@ div[data-testid="element-container"]:has(
 
 
 /* =========================================================
-   項目名
+   項目行
    ========================================================= */
 
-.memo-text {
+.memo-row {
     width: 100% !important;
+
     min-width: 0 !important;
 
-    margin: 0 !important;
-    padding: 0 2px !important;
-
-    font-size: 15px !important;
-
-    line-height: 1.4 !important;
-
-    word-break: break-word !important;
-    overflow-wrap: anywhere !important;
+    min-height: 44px !important;
 
     display: flex !important;
 
     align-items: center !important;
 
-    min-height: 40px !important;
-}
-
-
-.memo-text.completed {
-    text-decoration: line-through !important;
-    opacity: 0.45 !important;
+    overflow: hidden !important;
 }
 
 
 /* =========================================================
-   チェックボックス
+   チェックボックス部分
    ========================================================= */
 
 .item-check {
@@ -174,86 +156,30 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
-    height: 40px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
+    height: 44px !important;
 
     display: flex !important;
 
     align-items: center !important;
 
     justify-content: center !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
 }
 
+
+/*
+   チェックボックス全体
+*/
 
 .item-check div[data-testid="stCheckbox"] {
-    width: 40px !important;
+    width: 44px !important;
 
-    min-width: 40px !important;
+    min-width: 44px !important;
 
-    height: 40px !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-}
-
-
-.item-check div[data-testid="stCheckbox"] > label {
-    width: 40px !important;
-
-    min-width: 40px !important;
-
-    height: 40px !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    cursor: pointer !important;
-}
-
-
-.item-check input[type="checkbox"] {
-    width: 26px !important;
-
-    height: 26px !important;
-
-    min-width: 26px !important;
-
-    min-height: 26px !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
-
-    cursor: pointer !important;
-}
-
-
-/* =========================================================
-   ★ ごみ箱ボタン
-   ========================================================= */
-
-.item-delete {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    height: 40px !important;
+    height: 44px !important;
 
     margin: 0 !important;
 
@@ -268,15 +194,123 @@ div[data-testid="element-container"]:has(
 
 
 /*
-   Streamlitのボタン全体
+   チェックボックスのlabel
+*/
+
+.item-check div[data-testid="stCheckbox"] > label {
+    width: 44px !important;
+
+    min-width: 44px !important;
+
+    height: 44px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    cursor: pointer !important;
+}
+
+
+/*
+   ★ チェックボックス本体を大型化
+*/
+
+.item-check input[type="checkbox"] {
+    width: 30px !important;
+
+    height: 30px !important;
+
+    min-width: 30px !important;
+
+    min-height: 30px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    cursor: pointer !important;
+
+    accent-color: #555555 !important;
+}
+
+
+/* =========================================================
+   項目名
+   ========================================================= */
+
+.memo-text {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    min-height: 44px !important;
+
+    margin: 0 !important;
+
+    padding: 5px 4px !important;
+
+    font-size: 15px !important;
+
+    line-height: 1.45 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    word-break: break-word !important;
+
+    overflow-wrap: anywhere !important;
+
+    white-space: normal !important;
+}
+
+.memo-text.completed {
+    text-decoration: line-through !important;
+
+    opacity: 0.45 !important;
+}
+
+
+/* =========================================================
+   削除ボタン
+   ========================================================= */
+
+.item-delete {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 44px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+}
+
+
+/*
+   「削除」ボタン
 */
 
 .item-delete button {
-    width: 36px !important;
+    width: 54px !important;
 
-    min-width: 36px !important;
+    min-width: 54px !important;
 
-    max-width: 36px !important;
+    max-width: 54px !important;
 
     height: 36px !important;
 
@@ -284,9 +318,9 @@ div[data-testid="element-container"]:has(
 
     max-height: 36px !important;
 
-    padding: 0 !important;
-
     margin: 0 !important;
+
+    padding: 0 !important;
 
     display: flex !important;
 
@@ -298,12 +332,12 @@ div[data-testid="element-container"]:has(
 
     line-height: 1 !important;
 
-    overflow: hidden !important;
+    white-space: nowrap !important;
 }
 
 
 /*
-   ボタン内部のすべての要素を中央揃え
+   ボタン内部
 */
 
 .item-delete button > div {
@@ -345,15 +379,18 @@ div[data-testid="element-container"]:has(
 
 
 /* =========================================================
-   項目追加入力
+   項目追加エリア
    ========================================================= */
 
 .add-input {
     width: 100% !important;
 
     min-width: 0 !important;
-}
 
+    display: flex !important;
+
+    align-items: center !important;
+}
 
 .add-input input {
     width: 100% !important;
@@ -371,6 +408,8 @@ div[data-testid="element-container"]:has(
 .add-button {
     width: 100% !important;
 
+    height: 100% !important;
+
     min-width: 0 !important;
 
     display: flex !important;
@@ -378,8 +417,11 @@ div[data-testid="element-container"]:has(
     align-items: center !important;
 
     justify-content: center !important;
-}
 
+    margin: 0 !important;
+
+    padding: 0 !important;
+}
 
 .add-button button {
     width: 40px !important;
@@ -392,20 +434,26 @@ div[data-testid="element-container"]:has(
 
     min-height: 40px !important;
 
-    padding: 0 !important;
+    max-height: 40px !important;
 
     margin: 0 !important;
+
+    padding: 0 !important;
 
     display: flex !important;
 
     align-items: center !important;
 
     justify-content: center !important;
+
+    text-align: center !important;
+
+    line-height: 1 !important;
 }
 
 
 /* =========================================================
-   スマホ専用
+   スマホ専用調整
    ========================================================= */
 
 @media (max-width: 600px) {
@@ -415,20 +463,18 @@ div[data-testid="element-container"]:has(
         padding-right: 8px !important;
     }
 
+    div[data-testid="stHorizontalBlock"] {
+        gap: 3px !important;
+    }
 
     .memo-text {
         font-size: 15px !important;
     }
 
-
     .memo-title-button button {
         max-width: calc(100vw - 25px) !important;
     }
 
-
-    div[data-testid="stHorizontalBlock"] {
-        gap: 4px !important;
-    }
 }
 
 </style>
@@ -484,11 +530,10 @@ def init_database():
     """)
 
 
-    # 古いDBへの対応
+    # 古いDBとの互換性
     cursor.execute("""
         PRAGMA table_info(memo_items)
     """)
-
 
     columns = [
         row["name"]
@@ -882,7 +927,6 @@ if not memos:
         "「新しいメモを作成」からメモを作ってください。"
     )
 
-
 else:
 
     for memo in memos:
@@ -963,7 +1007,6 @@ if st.session_state.opened_memo_id is not None:
 
         st.divider()
 
-
         st.subheader(
             f"📝 {selected_memo['title']}"
         )
@@ -982,10 +1025,15 @@ if st.session_state.opened_memo_id is not None:
         ):
 
             input_col, plus_col = st.columns(
-                [8.4, 1],
-                gap="small"
+                [8.5, 1],
+                gap="small",
+                vertical_alignment="center"
             )
 
+
+            # ---------------------------------------------
+            # 入力欄
+            # ---------------------------------------------
 
             with input_col:
 
@@ -1008,6 +1056,10 @@ if st.session_state.opened_memo_id is not None:
                     unsafe_allow_html=True
                 )
 
+
+            # ---------------------------------------------
+            # ＋ボタン
+            # ---------------------------------------------
 
             with plus_col:
 
@@ -1073,19 +1125,23 @@ if st.session_state.opened_memo_id is not None:
             for item in items:
 
                 # =================================================
-                # チェック | 項目 | ごみ箱
+                # ★ ここが重要
+                #
+                # チェック | 項目名 | 削除
+                #
+                # の3列を必ず横並びにする
                 # =================================================
 
                 check_col, text_col, delete_col = st.columns(
-                    [0.9, 7.8, 0.95],
+                    [1.2, 6.8, 1.5],
                     gap="small",
                     vertical_alignment="center"
                 )
 
 
-                # -------------------------------------------------
-                # チェックボックス
-                # -------------------------------------------------
+                # ---------------------------------------------
+                # 左：チェックボックス
+                # ---------------------------------------------
 
                 with check_col:
 
@@ -1109,9 +1165,9 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                # -------------------------------------------------
-                # 項目名
-                # -------------------------------------------------
+                # ---------------------------------------------
+                # 中央：項目名
+                # ---------------------------------------------
 
                 with text_col:
 
@@ -1143,9 +1199,9 @@ if st.session_state.opened_memo_id is not None:
                         )
 
 
-                # -------------------------------------------------
-                # ごみ箱ボタン
-                # -------------------------------------------------
+                # ---------------------------------------------
+                # 右：削除
+                # ---------------------------------------------
 
                 with delete_col:
 
@@ -1155,17 +1211,11 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                    if st.button(
-                        "🗑",
+                    delete_button = st.button(
+                        "削除",
                         key=f"delete_{item['id']}",
-                        help="項目を削除"
-                    ):
-
-                        delete_memo_item(
-                            item["id"]
-                        )
-
-                        st.rerun()
+                        help="この項目を削除"
+                    )
 
 
                     st.markdown(
@@ -1174,9 +1224,18 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                # -------------------------------------------------
-                # チェック状態変更
-                # -------------------------------------------------
+                    if delete_button:
+
+                        delete_memo_item(
+                            item["id"]
+                        )
+
+                        st.rerun()
+
+
+                # ---------------------------------------------
+                # チェック状態の変更
+                # ---------------------------------------------
 
                 if checked != bool(item["completed"]):
 
