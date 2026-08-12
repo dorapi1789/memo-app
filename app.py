@@ -2,6 +2,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
+import html
 
 
 # =========================================================
@@ -23,6 +24,10 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* =====================================================
+   全体
+   ===================================================== */
+
 .block-container {
     padding-top: 1.5rem;
     padding-bottom: 3rem;
@@ -43,7 +48,7 @@ h3 {
 
 
 /* =====================================================
-   メモタイトルボタン
+   通常ボタン
    ===================================================== */
 
 .stButton button {
@@ -56,12 +61,21 @@ h3 {
    項目行
    ===================================================== */
 
-.item-row {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: 44px;
-    margin-bottom: 6px;
+/*
+   Streamlitの横方向コンテナを使用するため、
+   スマホでも項目を横一列に維持する。
+*/
+
+div[data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+}
+
+
+/* 項目行内の要素が縦に折り返されないようにする */
+
+div[data-testid="stHorizontalBlock"] > div {
+    flex-shrink: 1;
 }
 
 
@@ -89,9 +103,39 @@ h3 {
     }
 
     .stButton button {
-        min-height: 44px;
+        min-height: 42px;
     }
 
+}
+
+
+/* =====================================================
+   項目名
+   ===================================================== */
+
+.memo-item-text {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   完了した項目
+   ===================================================== */
+
+.memo-item-completed {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
 </style>
@@ -125,7 +169,7 @@ def init_database():
 
 
     # -----------------------------------------------------
-    # メモ
+    # メモ本体
     # -----------------------------------------------------
 
     cursor.execute("""
@@ -153,7 +197,7 @@ def init_database():
 
 
     # -----------------------------------------------------
-    # 既存データに completed がない場合
+    # 既存のmemo_itemsにcompletedがない場合
     # -----------------------------------------------------
 
     cursor.execute("""
@@ -220,7 +264,7 @@ def get_memos():
 
 
 # =========================================================
-# 項目取得
+# メモ項目取得
 # =========================================================
 
 def get_memo_items(memo_id):
@@ -228,6 +272,7 @@ def get_memo_items(memo_id):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 未完了を上に、完了を下に表示
     cursor.execute("""
         SELECT
             id,
@@ -281,6 +326,7 @@ def create_memo(title):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 入力したタイトルをそのまま保存
     cursor.execute("""
         INSERT INTO memos (
             title,
@@ -311,7 +357,7 @@ def delete_memo(memo_id):
     cursor = conn.cursor()
 
 
-    # メモの項目を削除
+    # メモに紐づいた項目を削除
     cursor.execute("""
         DELETE FROM memo_items
         WHERE memo_id = ?
@@ -338,6 +384,7 @@ def add_memo_item(memo_id, item):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 入力した項目をそのまま保存
     cursor.execute("""
         INSERT INTO memo_items (
             memo_id,
@@ -357,7 +404,7 @@ def add_memo_item(memo_id, item):
 
 
 # =========================================================
-# 項目の完了状態変更
+# 項目のチェック状態変更
 # =========================================================
 
 def update_item_completed(item_id, completed):
@@ -405,6 +452,7 @@ def create_free_memo(content):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 入力された文章をそのまま保存
     cursor.execute("""
         INSERT INTO free_memos (
             content,
@@ -448,7 +496,7 @@ if "opened_memo_id" not in st.session_state:
 
 
 # =========================================================
-# タイトル
+# アプリタイトル
 # =========================================================
 
 st.title("📝 かんたんメモ")
@@ -459,7 +507,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモ作成
+# 新しいメモを作成
 # =========================================================
 
 with st.expander(
@@ -593,7 +641,7 @@ else:
 
 
 # =========================================================
-# 選択したメモ
+# 選択したメモの中身
 # =========================================================
 
 if st.session_state.opened_memo_id is not None:
@@ -614,7 +662,7 @@ if st.session_state.opened_memo_id is not None:
 
 
     # -----------------------------------------------------
-    # メモが削除されている場合
+    # メモが存在しない場合
     # -----------------------------------------------------
 
     if selected_memo is None:
@@ -718,35 +766,29 @@ if st.session_state.opened_memo_id is not None:
 
         else:
 
-            # -------------------------------------------------
+            # =================================================
             # 項目を1つずつ表示
-            # -------------------------------------------------
+            # =================================================
 
             for item in items:
 
-                # =================================================
-                # ここが重要
-                #
-                # チェック
-                # ↓
-                # 項目名
-                # ↓
-                # 削除
-                #
-                # を必ず横1列にする
-                # =================================================
-
-                check_col, text_col, delete_col = st.columns(
-                    [0.8, 7.2, 1],
-                    vertical_alignment="center"
-                )
-
-
                 # -------------------------------------------------
-                # 左：チェックボックス
+                # 横一列のコンテナ
+                #
+                # チェック → 項目名 → 削除
+                #
+                # スマホでも折り返さない
                 # -------------------------------------------------
 
-                with check_col:
+                with st.container(
+                    horizontal=True,
+                    vertical_alignment="center",
+                    gap="small"
+                ):
+
+                    # ---------------------------------------------
+                    # 左：チェックボックス
+                    # ---------------------------------------------
 
                     checked = st.checkbox(
                         "完了",
@@ -756,52 +798,41 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                # -------------------------------------------------
-                # チェック状態が変わった場合
-                # -------------------------------------------------
+                    # ---------------------------------------------
+                    # 中央：項目名
+                    # ---------------------------------------------
 
-                if checked != bool(item["completed"]):
-
-                    update_item_completed(
-                        item["id"],
-                        checked
+                    safe_item = html.escape(
+                        str(item["item"])
                     )
 
-                    st.rerun()
-
-
-                # -------------------------------------------------
-                # 中央：項目名
-                # -------------------------------------------------
-
-                with text_col:
 
                     if item["completed"]:
 
                         st.markdown(
-                            f"<div style='padding-top:8px; "
-                            f"text-decoration:line-through; "
-                            f"opacity:0.55;'>"
-                            f"{item['item']}"
-                            f"</div>",
+                            f"""
+                            <div class="memo-item-completed">
+                                {safe_item}
+                            </div>
+                            """,
                             unsafe_allow_html=True
                         )
 
                     else:
 
                         st.markdown(
-                            f"<div style='padding-top:8px;'>"
-                            f"{item['item']}"
-                            f"</div>",
+                            f"""
+                            <div class="memo-item-text">
+                                {safe_item}
+                            </div>
+                            """,
                             unsafe_allow_html=True
                         )
 
 
-                # -------------------------------------------------
-                # 右：削除ボタン
-                # -------------------------------------------------
-
-                with delete_col:
+                    # ---------------------------------------------
+                    # 右：削除ボタン
+                    # ---------------------------------------------
 
                     if st.button(
                         "🗑",
@@ -814,6 +845,20 @@ if st.session_state.opened_memo_id is not None:
                         )
 
                         st.rerun()
+
+
+                # =================================================
+                # チェック状態が変更された場合
+                # =================================================
+
+                if checked != bool(item["completed"]):
+
+                    update_item_completed(
+                        item["id"],
+                        checked
+                    )
+
+                    st.rerun()
 
 
         # =================================================
@@ -855,6 +900,10 @@ with st.expander(
     )
 
 
+    # =====================================================
+    # フリーメモ入力
+    # =====================================================
+
     with st.form(
         key="free_memo_form",
         clear_on_submit=True
@@ -882,7 +931,7 @@ with st.expander(
 
 
     # =====================================================
-    # フリーメモ保存
+    # フリーメモ保存処理
     # =====================================================
 
     if save_button:
@@ -965,4 +1014,3 @@ st.divider()
 st.caption(
     "📝 かんたんメモ"
 )
-
