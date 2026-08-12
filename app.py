@@ -25,154 +25,130 @@ st.markdown("""
 <style>
 
 /* =========================================================
-   全体
+   横スクロール防止
    ========================================================= */
 
-.block-container {
-    padding-top: 1.2rem;
-    padding-bottom: 2rem;
-    max-width: 800px;
+html,
+body,
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"] {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
 }
 
-h1 {
-    font-size: 2rem !important;
-}
 
-h2 {
-    font-size: 1.4rem !important;
-}
-
-h3 {
-    font-size: 1.1rem !important;
+* {
+    box-sizing: border-box !important;
 }
 
 
 /* =========================================================
-   「作成したメモ」のボタンをコンパクトにする
+   メイン画面
    ========================================================= */
 
-/*
-   StreamlitのstButton周辺にある余白を削除
-*/
+.block-container {
+    width: 100% !important;
+    max-width: 800px !important;
 
-div[data-testid="stButton"] {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 2rem !important;
+
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+
+    overflow-x: hidden !important;
 }
 
 
-/*
-   ボタンを含む要素の余白も削除
-*/
+/* =========================================================
+   Streamlitの横方向コンテナ
+   ========================================================= */
 
-div[data-testid="element-container"]:has(
-    div[data-testid="stButton"]
-) {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+div[data-testid="stHorizontalBlock"] {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    overflow: hidden !important;
+
+    flex-wrap: nowrap !important;
 }
 
 
-/*
-   ボタンそのもの
-*/
+/* =========================================================
+   横方向コンテナの各要素
+   ========================================================= */
+
+div[data-testid="stHorizontalBlock"] > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+
+/* =========================================================
+   メモタイトルボタン
+   ========================================================= */
+
+.memo-list-button {
+    width: fit-content !important;
+    max-width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
 
 .memo-list-button button {
+
     width: auto !important;
 
-    min-width: 100px !important;
-    max-width: 260px !important;
+    min-width: 90px !important;
+    max-width: 240px !important;
 
     height: 38px !important;
     min-height: 38px !important;
 
-    padding: 4px 14px !important;
+    padding: 3px 12px !important;
 
     margin: 0 !important;
 
     border-radius: 8px !important;
 
     white-space: nowrap !important;
+
     overflow: hidden !important;
+
     text-overflow: ellipsis !important;
 }
 
 
-/*
-   メモボタンの行間をなくす
-*/
-
-.memo-list-area {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
 /* =========================================================
-   メモ一覧内のボタンの親要素を詰める
+   メモボタン周辺の余白
    ========================================================= */
 
-/*
-   StreamlitのVerticalBlock内部にある
-   Button要素周辺の余白を強制的に縮小
-*/
-
-div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
-
-/*
-   ボタンの前後にある余白をさらに縮小
-*/
-
-div[data-testid="stVerticalBlock"] div[data-testid="element-container"]:has(
+div[data-testid="element-container"]:has(
     div[data-testid="stButton"]
 ) {
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    margin-bottom: -5px !important;
 
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+
+    max-width: 100% !important;
 }
 
 
 /* =========================================================
-   メモタイトルボタンの中身
+   項目追加フォーム
    ========================================================= */
 
-.memo-list-button {
-    display: block !important;
-
-    width: fit-content !important;
+.add-item-form {
+    width: 100% !important;
     max-width: 100% !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
-/* =========================================================
-   通常のStreamlitボタン
-   ========================================================= */
-
-.stButton button {
-    border-radius: 9px;
-}
-
-
-/* =========================================================
-   項目一覧
-   ========================================================= */
-
-div[data-testid="stHorizontalBlock"] {
-    flex-wrap: nowrap !important;
-    align-items: center !important;
+    overflow: hidden !important;
 }
 
 
@@ -180,30 +156,26 @@ div[data-testid="stHorizontalBlock"] {
    項目名
    ========================================================= */
 
-.memo-item-text {
-    width: 100%;
+.memo-item-text,
+.memo-item-completed {
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
 
     padding-top: 5px;
     padding-bottom: 5px;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
 
 .memo-item-completed {
-    width: 100%;
-
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
     text-decoration: line-through;
-
     opacity: 0.5;
 }
 
@@ -212,15 +184,34 @@ div[data-testid="stHorizontalBlock"] {
    項目削除ボタン
    ========================================================= */
 
-.item-delete-button button {
+.item-delete-button {
     width: 40px !important;
+
     min-width: 40px !important;
+
     max-width: 40px !important;
 
+    flex-shrink: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.item-delete-button button {
+
+    width: 38px !important;
+
+    min-width: 38px !important;
+
+    max-width: 38px !important;
+
     height: 38px !important;
+
     min-height: 38px !important;
 
     padding: 0 !important;
+
     margin: 0 !important;
 }
 
@@ -229,89 +220,175 @@ div[data-testid="stHorizontalBlock"] {
    ＋ボタン
    ========================================================= */
 
-.add-item-button button {
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
+.add-item-button {
+    width: 42px !important;
 
-    height: 42px !important;
-    min-height: 42px !important;
+    min-width: 42px !important;
+
+    max-width: 42px !important;
+
+    flex-shrink: 0 !important;
+
+    margin: 0 !important;
 
     padding: 0 !important;
+}
+
+
+.add-item-button button {
+
+    width: 40px !important;
+
+    min-width: 40px !important;
+
+    max-width: 40px !important;
+
+    height: 40px !important;
+
+    min-height: 40px !important;
+
+    padding: 0 !important;
+
     margin: 0 !important;
 }
 
 
 /* =========================================================
-   スマホ
+   チェックボックス
+   ========================================================= */
+
+div[data-testid="stCheckbox"] {
+
+    flex-shrink: 0 !important;
+
+    width: 34px !important;
+
+    min-width: 34px !important;
+
+    max-width: 34px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+}
+
+
+/* =========================================================
+   通常ボタン
+   ========================================================= */
+
+.stButton button {
+    border-radius: 9px;
+}
+
+
+/* =========================================================
+   スマホ専用
    ========================================================= */
 
 @media (max-width: 600px) {
 
+    /* -----------------------------------------
+       メイン
+       ----------------------------------------- */
+
     .block-container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
 
+        width: 100vw !important;
 
-    h1 {
-        font-size: 1.7rem !important;
-    }
+        max-width: 100vw !important;
 
+        padding-left: 10px !important;
 
-    h2 {
-        font-size: 1.3rem !important;
-    }
+        padding-right: 10px !important;
 
+        margin-left: 0 !important;
 
-    h3 {
-        font-size: 1.1rem !important;
+        margin-right: 0 !important;
     }
 
 
     /* -----------------------------------------
-       メモタイトルボタン
+       メモタイトル
        ----------------------------------------- */
 
+    .memo-list-button {
+
+        max-width: calc(100vw - 20px) !important;
+
+        overflow: hidden !important;
+    }
+
+
     .memo-list-button button {
+
+        max-width: calc(100vw - 30px) !important;
+
         min-width: 90px !important;
-        max-width: 210px !important;
 
         height: 36px !important;
+
         min-height: 36px !important;
 
-        padding: 3px 10px !important;
+        padding-left: 10px !important;
+
+        padding-right: 10px !important;
 
         font-size: 0.9rem !important;
     }
 
 
     /* -----------------------------------------
-       メモボタン周辺の余白
+       項目追加欄
        ----------------------------------------- */
 
-    div[data-testid="element-container"]:has(
-        div[data-testid="stButton"]
-    ) {
-        margin-top: 0 !important;
-        margin-bottom: -6px !important;
+    div[data-testid="stHorizontalBlock"] {
 
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        margin-left: 0 !important;
+
+        margin-right: 0 !important;
+
+        overflow: hidden !important;
     }
 
 
     /* -----------------------------------------
-       項目削除
+       項目入力欄
        ----------------------------------------- */
 
-    .item-delete-button button {
-        width: 36px !important;
-        min-width: 36px !important;
-        max-width: 36px !important;
+    div[data-testid="stHorizontalBlock"] > div:first-child {
 
-        height: 36px !important;
-        min-height: 36px !important;
+        min-width: 0 !important;
+
+        width: calc(100% - 48px) !important;
+
+        max-width: calc(100% - 48px) !important;
+
+        flex: 1 1 auto !important;
+
+        overflow: hidden !important;
+    }
+
+
+    /* -----------------------------------------
+       ＋ボタン側
+       ----------------------------------------- */
+
+    div[data-testid="stHorizontalBlock"] > div:last-child {
+
+        flex: 0 0 44px !important;
+
+        width: 44px !important;
+
+        min-width: 44px !important;
+
+        max-width: 44px !important;
+
+        overflow: hidden !important;
     }
 
 
@@ -319,13 +396,148 @@ div[data-testid="stHorizontalBlock"] {
        ＋ボタン
        ----------------------------------------- */
 
-    .add-item-button button {
+    .add-item-button {
+
         width: 42px !important;
+
         min-width: 42px !important;
+
         max-width: 42px !important;
+    }
+
+
+    .add-item-button button {
+
+        width: 40px !important;
+
+        min-width: 40px !important;
+
+        max-width: 40px !important;
 
         height: 40px !important;
+
         min-height: 40px !important;
+    }
+
+
+    /* -----------------------------------------
+       項目行
+       ----------------------------------------- */
+
+    .memo-item-text,
+    .memo-item-completed {
+
+        min-width: 0 !important;
+
+        max-width: 100% !important;
+
+        overflow: hidden !important;
+
+        text-overflow: ellipsis !important;
+
+        white-space: nowrap !important;
+    }
+
+
+    /* -----------------------------------------
+       チェック
+       ----------------------------------------- */
+
+    div[data-testid="stCheckbox"] {
+
+        width: 32px !important;
+
+        min-width: 32px !important;
+
+        max-width: 32px !important;
+
+        flex: 0 0 32px !important;
+    }
+
+
+    /* -----------------------------------------
+       項目削除ボタン
+       ----------------------------------------- */
+
+    .item-delete-button {
+
+        width: 40px !important;
+
+        min-width: 40px !important;
+
+        max-width: 40px !important;
+
+        flex: 0 0 40px !important;
+    }
+
+
+    .item-delete-button button {
+
+        width: 36px !important;
+
+        min-width: 36px !important;
+
+        max-width: 36px !important;
+
+        height: 36px !important;
+
+        min-height: 36px !important;
+    }
+
+
+    /* -----------------------------------------
+       項目名の横幅を確実に制限
+       ----------------------------------------- */
+
+    div[data-testid="stHorizontalBlock"]
+    div[data-testid="stMarkdownContainer"] {
+
+        min-width: 0 !important;
+
+        max-width: 100% !important;
+
+        overflow: hidden !important;
+    }
+
+
+    /* -----------------------------------------
+       入力フォーム
+       ----------------------------------------- */
+
+    .stTextInput,
+    .stTextArea {
+
+        max-width: 100% !important;
+
+        overflow: hidden !important;
+    }
+
+
+    /* -----------------------------------------
+       テキスト入力
+       ----------------------------------------- */
+
+    .stTextInput input {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------
+       フリーメモ
+       ----------------------------------------- */
+
+    .stTextArea textarea {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        box-sizing: border-box !important;
     }
 }
 
@@ -350,16 +562,16 @@ def get_connection():
 
 
 # =========================================================
-# データベース初期化
+# DB初期化
 # =========================================================
 
 def init_database():
 
     conn = get_connection()
+
     cursor = conn.cursor()
 
 
-    # メモ本体
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -369,7 +581,6 @@ def init_database():
     """)
 
 
-    # メモ項目
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memo_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -381,10 +592,10 @@ def init_database():
     """)
 
 
-    # completed列が存在するか確認
     cursor.execute("""
         PRAGMA table_info(memo_items)
     """)
+
 
     columns = [
         row["name"]
@@ -400,7 +611,6 @@ def init_database():
         """)
 
 
-    # フリーメモ
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS free_memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -411,6 +621,7 @@ def init_database():
 
 
     conn.commit()
+
     conn.close()
 
 
@@ -424,16 +635,16 @@ init_database()
 def get_memos():
 
     conn = get_connection()
+
     cursor = conn.cursor()
 
+
     cursor.execute("""
-        SELECT
-            id,
-            title,
-            created_at
+        SELECT id, title, created_at
         FROM memos
         ORDER BY id DESC
     """)
+
 
     result = cursor.fetchall()
 
@@ -449,7 +660,9 @@ def get_memos():
 def get_memo_items(memo_id):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         SELECT
@@ -462,6 +675,7 @@ def get_memo_items(memo_id):
         WHERE memo_id = ?
         ORDER BY completed ASC, id ASC
     """, (memo_id,))
+
 
     result = cursor.fetchall()
 
@@ -477,7 +691,9 @@ def get_memo_items(memo_id):
 def get_free_memos():
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         SELECT
@@ -487,6 +703,7 @@ def get_free_memos():
         FROM free_memos
         ORDER BY id DESC
     """)
+
 
     result = cursor.fetchall()
 
@@ -502,7 +719,9 @@ def get_free_memos():
 def create_memo(title):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         INSERT INTO memos (
@@ -515,13 +734,10 @@ def create_memo(title):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
+
     conn.commit()
 
-    memo_id = cursor.lastrowid
-
     conn.close()
-
-    return memo_id
 
 
 # =========================================================
@@ -531,7 +747,9 @@ def create_memo(title):
 def delete_memo(memo_id):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         DELETE FROM memo_items
@@ -546,6 +764,7 @@ def delete_memo(memo_id):
 
 
     conn.commit()
+
     conn.close()
 
 
@@ -556,7 +775,9 @@ def delete_memo(memo_id):
 def add_memo_item(memo_id, item):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         INSERT INTO memo_items (
@@ -572,18 +793,22 @@ def add_memo_item(memo_id, item):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
+
     conn.commit()
+
     conn.close()
 
 
 # =========================================================
-# チェック変更
+# チェック状態変更
 # =========================================================
 
 def update_item_completed(item_id, completed):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         UPDATE memo_items
@@ -594,7 +819,9 @@ def update_item_completed(item_id, completed):
         item_id
     ))
 
+
     conn.commit()
+
     conn.close()
 
 
@@ -605,14 +832,18 @@ def update_item_completed(item_id, completed):
 def delete_memo_item(item_id):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         DELETE FROM memo_items
         WHERE id = ?
     """, (item_id,))
 
+
     conn.commit()
+
     conn.close()
 
 
@@ -623,7 +854,9 @@ def delete_memo_item(item_id):
 def create_free_memo(content):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         INSERT INTO free_memos (
@@ -636,7 +869,9 @@ def create_free_memo(content):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
+
     conn.commit()
+
     conn.close()
 
 
@@ -647,14 +882,18 @@ def create_free_memo(content):
 def delete_free_memo(memo_id):
 
     conn = get_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         DELETE FROM free_memos
         WHERE id = ?
     """, (memo_id,))
 
+
     conn.commit()
+
     conn.close()
 
 
@@ -679,7 +918,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモを作成
+# 新しいメモ作成
 # =========================================================
 
 with st.expander(
@@ -749,74 +988,54 @@ if not memos:
 
 else:
 
-    # =====================================================
-    # メモ一覧専用コンテナ
-    # =====================================================
+    for memo in memos:
 
-    memo_list_container = st.container()
+        if (
+            st.session_state.opened_memo_id
+            == memo["id"]
+        ):
 
-    with memo_list_container:
+            button_text = f"🔽 {memo['title']}"
 
-        for memo in memos:
+        else:
 
-            # ---------------------------------------------
-            # メモタイトルボタン
-            # ---------------------------------------------
+            button_text = f"📝 {memo['title']}"
+
+
+        st.markdown(
+            '<div class="memo-list-button">',
+            unsafe_allow_html=True
+        )
+
+
+        if st.button(
+            button_text,
+            key=f"open_memo_{memo['id']}"
+        ):
 
             if (
                 st.session_state.opened_memo_id
                 == memo["id"]
             ):
 
-                button_text = (
-                    f"🔽 {memo['title']}"
-                )
+                st.session_state.opened_memo_id = None
 
             else:
 
-                button_text = (
-                    f"📝 {memo['title']}"
-                )
+                st.session_state.opened_memo_id = memo["id"]
 
 
-            # ---------------------------------------------
-            # ボタン
-            # ---------------------------------------------
-
-            st.markdown(
-                '<div class="memo-list-button">',
-                unsafe_allow_html=True
-            )
+            st.rerun()
 
 
-            if st.button(
-                button_text,
-                key=f"open_memo_{memo['id']}"
-            ):
-
-                if (
-                    st.session_state.opened_memo_id
-                    == memo["id"]
-                ):
-
-                    st.session_state.opened_memo_id = None
-
-                else:
-
-                    st.session_state.opened_memo_id = memo["id"]
-
-
-                st.rerun()
-
-
-            st.markdown(
-                '</div>',
-                unsafe_allow_html=True
-            )
+        st.markdown(
+            '</div>',
+            unsafe_allow_html=True
+        )
 
 
 # =========================================================
-# 選択中のメモ
+# 選択したメモ
 # =========================================================
 
 if st.session_state.opened_memo_id is not None:
@@ -832,6 +1051,7 @@ if st.session_state.opened_memo_id is not None:
         ):
 
             selected_memo = memo
+
             break
 
 
@@ -846,10 +1066,6 @@ if st.session_state.opened_memo_id is not None:
 
         st.divider()
 
-
-        # =================================================
-        # メモタイトル
-        # =================================================
 
         st.subheader(
             f"📝 {selected_memo['title']}"
@@ -869,7 +1085,8 @@ if st.session_state.opened_memo_id is not None:
         ):
 
             item_col, add_col = st.columns(
-                [8, 1]
+                [1, 0.12],
+                gap="small"
             )
 
 
@@ -947,7 +1164,7 @@ if st.session_state.opened_memo_id is not None:
             for item in items:
 
                 # -----------------------------------------
-                # チェック・項目名・削除
+                # 1行に収める
                 # -----------------------------------------
 
                 with st.container(
@@ -956,6 +1173,10 @@ if st.session_state.opened_memo_id is not None:
                     gap="small"
                 ):
 
+                    # -------------------------------------
+                    # チェック
+                    # -------------------------------------
+
                     checked = st.checkbox(
                         "完了",
                         value=bool(item["completed"]),
@@ -963,6 +1184,10 @@ if st.session_state.opened_memo_id is not None:
                         label_visibility="collapsed"
                     )
 
+
+                    # -------------------------------------
+                    # 項目名
+                    # -------------------------------------
 
                     safe_item = html.escape(
                         str(item["item"])
@@ -992,6 +1217,10 @@ if st.session_state.opened_memo_id is not None:
                         )
 
 
+                    # -------------------------------------
+                    # 削除
+                    # -------------------------------------
+
                     st.markdown(
                         '<div class="item-delete-button">',
                         unsafe_allow_html=True
@@ -1018,7 +1247,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # -----------------------------------------
-                # チェック状態変更
+                # チェック変更
                 # -----------------------------------------
 
                 if checked != bool(item["completed"]):
@@ -1047,6 +1276,7 @@ if st.session_state.opened_memo_id is not None:
             delete_memo(
                 selected_memo["id"]
             )
+
 
             st.session_state.opened_memo_id = None
 
@@ -1119,7 +1349,7 @@ with st.expander(
 
 
     # =====================================================
-    # 保存済みフリーメモ
+    # 保存したフリーメモ
     # =====================================================
 
     free_memos = get_free_memos()
