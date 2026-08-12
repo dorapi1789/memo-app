@@ -24,7 +24,7 @@ st.markdown("""
 <style>
 
 /* =========================================================
-   基本設定
+   画面全体
    ========================================================= */
 
 html,
@@ -61,7 +61,7 @@ body {
 
 
 /* =========================================================
-   Streamlitの横並び
+   横並び
    ========================================================= */
 
 div[data-testid="stHorizontalBlock"] {
@@ -83,7 +83,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   メモタイトルボタン
+   メモタイトル
    ========================================================= */
 
 .memo-title-button {
@@ -116,28 +116,15 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   メモタイトル同士の余白
-   ========================================================= */
-
-div[data-testid="element-container"]:has(
-    .memo-title-button
-) {
-    margin-top: 0 !important;
-    margin-bottom: 2px !important;
-    padding: 0 !important;
-}
-
-
-/* =========================================================
    項目行
    ========================================================= */
 
-.memo-row {
+.item-row {
     width: 100% !important;
 
     min-width: 0 !important;
 
-    min-height: 44px !important;
+    height: 48px !important;
 
     display: flex !important;
 
@@ -148,7 +135,7 @@ div[data-testid="element-container"]:has(
 
 
 /* =========================================================
-   チェックボックス部分
+   ★ チェックボックス
    ========================================================= */
 
 .item-check {
@@ -156,33 +143,31 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
-    height: 44px !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
 
     display: flex !important;
 
     align-items: center !important;
 
     justify-content: center !important;
-
-    margin: 0 !important;
-
-    padding: 0 !important;
 }
 
 
 /*
-   チェックボックス全体
+   Streamlit checkbox 本体の位置をリセット
 */
 
 .item-check div[data-testid="stCheckbox"] {
-    width: 44px !important;
+    width: 48px !important;
 
-    min-width: 44px !important;
+    min-width: 48px !important;
 
-    height: 44px !important;
+    height: 48px !important;
 
     margin: 0 !important;
-
     padding: 0 !important;
 
     display: flex !important;
@@ -194,15 +179,15 @@ div[data-testid="element-container"]:has(
 
 
 /*
-   チェックボックスのlabel
+   label全体
 */
 
 .item-check div[data-testid="stCheckbox"] > label {
-    width: 44px !important;
+    width: 48px !important;
 
-    min-width: 44px !important;
+    min-width: 48px !important;
 
-    height: 44px !important;
+    height: 48px !important;
 
     margin: 0 !important;
 
@@ -219,25 +204,83 @@ div[data-testid="element-container"]:has(
 
 
 /*
-   ★ チェックボックス本体を大型化
+   ★ チェックボックスを36pxに大型化
 */
 
 .item-check input[type="checkbox"] {
-    width: 30px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
 
-    height: 30px !important;
+    width: 36px !important;
+    height: 36px !important;
 
-    min-width: 30px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
 
-    min-height: 30px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
 
     margin: 0 !important;
-
     padding: 0 !important;
+
+    border: 2px solid #777 !important;
+
+    border-radius: 6px !important;
+
+    background: white !important;
 
     cursor: pointer !important;
 
-    accent-color: #555555 !important;
+    position: relative !important;
+
+    display: block !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/*
+   チェックされた状態
+*/
+
+.item-check input[type="checkbox"]:checked {
+    background: #555 !important;
+
+    border-color: #555 !important;
+}
+
+
+/*
+   チェックマーク
+*/
+
+.item-check input[type="checkbox"]:checked::after {
+    content: "✓" !important;
+
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
+    transform: translate(-50%, -53%) !important;
+
+    color: white !important;
+
+    font-size: 25px !important;
+
+    font-weight: bold !important;
+
+    line-height: 1 !important;
+}
+
+
+/*
+   チェックボックス周辺のStreamlit余白を削除
+*/
+
+.item-check div[data-testid="stCheckbox"] > label > div {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 
@@ -250,7 +293,7 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
-    min-height: 44px !important;
+    min-height: 48px !important;
 
     margin: 0 !important;
 
@@ -287,7 +330,7 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
-    height: 44px !important;
+    height: 48px !important;
 
     display: flex !important;
 
@@ -299,11 +342,6 @@ div[data-testid="element-container"]:has(
 
     padding: 0 !important;
 }
-
-
-/*
-   「削除」ボタン
-*/
 
 .item-delete button {
     width: 54px !important;
@@ -335,11 +373,6 @@ div[data-testid="element-container"]:has(
     white-space: nowrap !important;
 }
 
-
-/*
-   ボタン内部
-*/
-
 .item-delete button > div {
     width: 100% !important;
 
@@ -355,7 +388,6 @@ div[data-testid="element-container"]:has(
 
     padding: 0 !important;
 }
-
 
 .item-delete button p {
     width: 100% !important;
@@ -379,7 +411,7 @@ div[data-testid="element-container"]:has(
 
 
 /* =========================================================
-   項目追加エリア
+   項目追加
    ========================================================= */
 
 .add-input {
@@ -453,7 +485,7 @@ div[data-testid="element-container"]:has(
 
 
 /* =========================================================
-   スマホ専用調整
+   スマホ
    ========================================================= */
 
 @media (max-width: 600px) {
@@ -469,10 +501,6 @@ div[data-testid="element-container"]:has(
 
     .memo-text {
         font-size: 15px !important;
-    }
-
-    .memo-title-button button {
-        max-width: calc(100vw - 25px) !important;
     }
 
 }
@@ -498,7 +526,7 @@ def get_connection():
 
 
 # =========================================================
-# データベース初期化
+# DB初期化
 # =========================================================
 
 def init_database():
@@ -508,7 +536,6 @@ def init_database():
     cursor = conn.cursor()
 
 
-    # メモ
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -518,7 +545,6 @@ def init_database():
     """)
 
 
-    # 項目
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memo_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -530,10 +556,10 @@ def init_database():
     """)
 
 
-    # 古いDBとの互換性
     cursor.execute("""
         PRAGMA table_info(memo_items)
     """)
+
 
     columns = [
         row["name"]
@@ -549,7 +575,6 @@ def init_database():
         """)
 
 
-    # フリーメモ
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS free_memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -568,7 +593,7 @@ init_database()
 
 
 # =========================================================
-# メモ取得
+# データ取得
 # =========================================================
 
 def get_memos():
@@ -577,16 +602,11 @@ def get_memos():
 
     cursor = conn.cursor()
 
-
     cursor.execute("""
-        SELECT
-            id,
-            title,
-            created_at
+        SELECT id, title, created_at
         FROM memos
         ORDER BY id DESC
     """)
-
 
     result = cursor.fetchall()
 
@@ -595,16 +615,11 @@ def get_memos():
     return result
 
 
-# =========================================================
-# 項目取得
-# =========================================================
-
 def get_memo_items(memo_id):
 
     conn = get_connection()
 
     cursor = conn.cursor()
-
 
     cursor.execute("""
         SELECT
@@ -618,17 +633,12 @@ def get_memo_items(memo_id):
         ORDER BY completed ASC, id ASC
     """, (memo_id,))
 
-
     result = cursor.fetchall()
 
     conn.close()
 
     return result
 
-
-# =========================================================
-# フリーメモ取得
-# =========================================================
 
 def get_free_memos():
 
@@ -636,16 +646,11 @@ def get_free_memos():
 
     cursor = conn.cursor()
 
-
     cursor.execute("""
-        SELECT
-            id,
-            content,
-            created_at
+        SELECT id, content, created_at
         FROM free_memos
         ORDER BY id DESC
     """)
-
 
     result = cursor.fetchall()
 
@@ -655,7 +660,7 @@ def get_free_memos():
 
 
 # =========================================================
-# メモ作成
+# メモ関連
 # =========================================================
 
 def create_memo(title):
@@ -663,7 +668,6 @@ def create_memo(title):
     conn = get_connection()
 
     cursor = conn.cursor()
-
 
     cursor.execute("""
         INSERT INTO memos (
@@ -676,15 +680,10 @@ def create_memo(title):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
-
     conn.commit()
 
     conn.close()
 
-
-# =========================================================
-# メモ削除
-# =========================================================
 
 def delete_memo(memo_id):
 
@@ -692,18 +691,15 @@ def delete_memo(memo_id):
 
     cursor = conn.cursor()
 
-
     cursor.execute("""
         DELETE FROM memo_items
         WHERE memo_id = ?
     """, (memo_id,))
 
-
     cursor.execute("""
         DELETE FROM memos
         WHERE id = ?
     """, (memo_id,))
-
 
     conn.commit()
 
@@ -711,7 +707,7 @@ def delete_memo(memo_id):
 
 
 # =========================================================
-# 項目追加
+# 項目関連
 # =========================================================
 
 def add_memo_item(memo_id, item):
@@ -719,7 +715,6 @@ def add_memo_item(memo_id, item):
     conn = get_connection()
 
     cursor = conn.cursor()
-
 
     cursor.execute("""
         INSERT INTO memo_items (
@@ -735,22 +730,16 @@ def add_memo_item(memo_id, item):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
-
     conn.commit()
 
     conn.close()
 
-
-# =========================================================
-# 項目チェック変更
-# =========================================================
 
 def update_item_completed(item_id, completed):
 
     conn = get_connection()
 
     cursor = conn.cursor()
-
 
     cursor.execute("""
         UPDATE memo_items
@@ -761,15 +750,10 @@ def update_item_completed(item_id, completed):
         item_id
     ))
 
-
     conn.commit()
 
     conn.close()
 
-
-# =========================================================
-# 項目削除
-# =========================================================
 
 def delete_memo_item(item_id):
 
@@ -777,12 +761,10 @@ def delete_memo_item(item_id):
 
     cursor = conn.cursor()
 
-
     cursor.execute("""
         DELETE FROM memo_items
         WHERE id = ?
     """, (item_id,))
-
 
     conn.commit()
 
@@ -790,7 +772,7 @@ def delete_memo_item(item_id):
 
 
 # =========================================================
-# フリーメモ保存
+# フリーメモ関連
 # =========================================================
 
 def create_free_memo(content):
@@ -798,7 +780,6 @@ def create_free_memo(content):
     conn = get_connection()
 
     cursor = conn.cursor()
-
 
     cursor.execute("""
         INSERT INTO free_memos (
@@ -811,15 +792,10 @@ def create_free_memo(content):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
-
     conn.commit()
 
     conn.close()
 
-
-# =========================================================
-# フリーメモ削除
-# =========================================================
 
 def delete_free_memo(memo_id):
 
@@ -827,12 +803,10 @@ def delete_free_memo(memo_id):
 
     cursor = conn.cursor()
 
-
     cursor.execute("""
         DELETE FROM free_memos
         WHERE id = ?
     """, (memo_id,))
-
 
     conn.commit()
 
@@ -840,7 +814,7 @@ def delete_free_memo(memo_id):
 
 
 # =========================================================
-# セッション状態
+# セッション
 # =========================================================
 
 if "opened_memo_id" not in st.session_state:
@@ -860,7 +834,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモを作成
+# 新しいメモ
 # =========================================================
 
 with st.expander(
@@ -879,7 +853,6 @@ with st.expander(
             key="new_memo_title"
         )
 
-
         create_button = st.form_submit_button(
             "＋ メモを作成",
             use_container_width=True
@@ -889,7 +862,6 @@ with st.expander(
     if create_button:
 
         title = new_title.strip()
-
 
         if title:
 
@@ -965,7 +937,6 @@ else:
 
                 st.session_state.opened_memo_id = memo["id"]
 
-
             st.rerun()
 
 
@@ -1031,17 +1002,12 @@ if st.session_state.opened_memo_id is not None:
             )
 
 
-            # ---------------------------------------------
-            # 入力欄
-            # ---------------------------------------------
-
             with input_col:
 
                 st.markdown(
                     '<div class="add-input">',
                     unsafe_allow_html=True
                 )
-
 
                 new_item = st.text_input(
                     "項目",
@@ -1050,16 +1016,11 @@ if st.session_state.opened_memo_id is not None:
                     key=f"new_item_{selected_memo['id']}"
                 )
 
-
                 st.markdown(
                     '</div>',
                     unsafe_allow_html=True
                 )
 
-
-            # ---------------------------------------------
-            # ＋ボタン
-            # ---------------------------------------------
 
             with plus_col:
 
@@ -1068,11 +1029,9 @@ if st.session_state.opened_memo_id is not None:
                     unsafe_allow_html=True
                 )
 
-
                 add_button = st.form_submit_button(
                     "＋"
                 )
-
 
                 st.markdown(
                     '</div>',
@@ -1083,7 +1042,6 @@ if st.session_state.opened_memo_id is not None:
         if add_button:
 
             item_text = new_item.strip()
-
 
             if item_text:
 
@@ -1119,28 +1077,25 @@ if st.session_state.opened_memo_id is not None:
                 "まだ項目がありません。"
             )
 
-
         else:
 
             for item in items:
 
                 # =================================================
-                # ★ ここが重要
+                # ★ 3列を横一列に固定
                 #
                 # チェック | 項目名 | 削除
-                #
-                # の3列を必ず横並びにする
                 # =================================================
 
                 check_col, text_col, delete_col = st.columns(
-                    [1.2, 6.8, 1.5],
+                    [1.25, 6.75, 1.5],
                     gap="small",
                     vertical_alignment="center"
                 )
 
 
                 # ---------------------------------------------
-                # 左：チェックボックス
+                # チェック
                 # ---------------------------------------------
 
                 with check_col:
@@ -1166,7 +1121,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # ---------------------------------------------
-                # 中央：項目名
+                # 項目名
                 # ---------------------------------------------
 
                 with text_col:
@@ -1200,7 +1155,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # ---------------------------------------------
-                # 右：削除
+                # 削除
                 # ---------------------------------------------
 
                 with delete_col:
@@ -1234,7 +1189,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # ---------------------------------------------
-                # チェック状態の変更
+                # チェック状態更新
                 # ---------------------------------------------
 
                 if checked != bool(item["completed"]):
@@ -1263,7 +1218,6 @@ if st.session_state.opened_memo_id is not None:
             delete_memo(
                 selected_memo["id"]
             )
-
 
             st.session_state.opened_memo_id = None
 
@@ -1316,7 +1270,6 @@ with st.expander(
     if save_button:
 
         content = free_text.strip()
-
 
         if content:
 
