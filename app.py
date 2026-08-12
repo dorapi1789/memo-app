@@ -1,3 +1,4 @@
+
 import streamlit as st
 import sqlite3
 from datetime import datetime
@@ -8,10 +9,72 @@ from datetime import datetime
 # =========================================================
 
 st.set_page_config(
-    page_title="かんたんメモアプリ",
+    page_title="かんたんメモ",
     page_icon="📝",
-    layout="wide"
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
+
+
+# =========================================================
+# スマホ向けデザイン
+# =========================================================
+
+st.markdown("""
+<style>
+
+.block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+    max-width: 800px;
+}
+
+h1 {
+    font-size: 2rem !important;
+}
+
+h2 {
+    font-size: 1.4rem !important;
+}
+
+h3 {
+    font-size: 1.1rem !important;
+}
+
+/* ボタン */
+.stButton button {
+    min-height: 44px;
+    border-radius: 10px;
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+
+    .block-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    h1 {
+        font-size: 1.7rem !important;
+    }
+
+    h2 {
+        font-size: 1.3rem !important;
+    }
+
+    h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .stButton button {
+        min-height: 46px;
+    }
+
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 # =========================================================
@@ -22,17 +85,33 @@ DB_NAME = "memo_app.db"
 
 
 def get_connection():
+    """
+    SQLiteデータベースへ接続する
+    """
+
     conn = sqlite3.connect(DB_NAME)
+
+    # カラム名でデータを取得できるようにする
     conn.row_factory = sqlite3.Row
+
     return conn
 
+
+# =========================================================
+# データベース初期化
+# =========================================================
 
 def init_database():
 
     conn = get_connection()
     cursor = conn.cursor()
 
+    # -----------------------------------------------------
     # メモ本体
+    #
+    # 今回はカテゴリーを完全に使わない
+    # -----------------------------------------------------
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +120,10 @@ def init_database():
         )
     """)
 
-    # メモの項目
+    # -----------------------------------------------------
+    # メモ項目
+    # -----------------------------------------------------
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memo_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +133,10 @@ def init_database():
         )
     """)
 
+    # -----------------------------------------------------
     # フリーメモ
+    # -----------------------------------------------------
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS free_memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,7 +162,10 @@ def get_memos():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, title, created_at
+        SELECT
+            id,
+            title,
+            created_at
         FROM memos
         ORDER BY id DESC
     """)
@@ -89,13 +177,21 @@ def get_memos():
     return result
 
 
+# =========================================================
+# メモ項目取得
+# =========================================================
+
 def get_memo_items(memo_id):
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, memo_id, item, created_at
+        SELECT
+            id,
+            memo_id,
+            item,
+            created_at
         FROM memo_items
         WHERE memo_id = ?
         ORDER BY id ASC
@@ -108,13 +204,20 @@ def get_memo_items(memo_id):
     return result
 
 
+# =========================================================
+# フリーメモ取得
+# =========================================================
+
 def get_free_memos():
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, content, created_at
+        SELECT
+            id,
+            content,
+            created_at
         FROM free_memos
         ORDER BY id DESC
     """)
@@ -135,6 +238,7 @@ def create_memo(title):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # タイトルは入力された文字をそのまま保存
     cursor.execute("""
         INSERT INTO memos (
             title,
@@ -164,7 +268,7 @@ def delete_memo(memo_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # 先にメモに紐づいている項目を削除
+    # メモに紐づいている項目も削除
     cursor.execute("""
         DELETE FROM memo_items
         WHERE memo_id = ?
@@ -189,6 +293,7 @@ def add_memo_item(memo_id, item):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 項目も入力された文字をそのまま保存
     cursor.execute("""
         INSERT INTO memo_items (
             memo_id,
@@ -233,6 +338,7 @@ def create_free_memo(content):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # 入力された文章をそのまま保存
     cursor.execute("""
         INSERT INTO free_memos (
             content,
@@ -267,284 +373,431 @@ def delete_free_memo(memo_id):
 
 
 # =========================================================
-# 画面
+# セッション状態
 # =========================================================
 
-st.title("📝 かんたんメモアプリ")
+# 現在開いているメモ
+if "opened_memo_id" not in st.session_state:
 
-st.write(
-    "買い物リスト、ToDo、仕事のメモなどをまとめて管理できます。"
+    st.session_state.opened_memo_id = None
+
+
+# =========================================================
+# タイトル
+# =========================================================
+
+st.title("📝 かんたんメモ")
+
+st.caption(
+    "メモをタップすると項目を表示できます。"
 )
 
 
 # =========================================================
-# 新しいメモを作る
+# 新しいメモを作成
 # =========================================================
 
-st.header("➕ 新しいメモを作成")
-
-
-with st.form(
-    key="create_new_memo_form",
-    clear_on_submit=True
+with st.expander(
+    "➕ 新しいメモを作成",
+    expanded=False
 ):
 
-    title = st.text_input(
-        "メモのタイトル",
-        placeholder="例：買い物リスト",
-        key="new_memo_title"
-    )
+    with st.form(
+        key="create_new_memo_form",
+        clear_on_submit=True
+    ):
 
-    create_button = st.form_submit_button(
-        "＋ メモを作成",
-        use_container_width=True
-    )
-
-
-if create_button:
-
-    title = title.strip()
-
-    if title:
-
-        # 新しいメモをSQLiteに保存
-        create_memo(title)
-
-        st.success(
-            f"「{title}」を作成しました！"
+        new_title = st.text_input(
+            "メモのタイトル",
+            placeholder="例：買い物リスト",
+            key="new_memo_title"
         )
 
-        # フォームの内容は clear_on_submit=True
-        # によって自動的にクリアされる
-        st.rerun()
-
-    else:
-
-        st.warning(
-            "メモのタイトルを入力してください。"
+        create_button = st.form_submit_button(
+            "＋ メモを作成",
+            use_container_width=True
         )
 
 
-st.divider()
+    if create_button:
+
+        # 入力された文字の前後にある
+        # 不要な空白だけ削除
+        title = new_title.strip()
+
+        if title:
+
+            create_memo(title)
+
+            st.success(
+                f"「{title}」を作成しました！"
+            )
+
+            st.rerun()
+
+        else:
+
+            st.warning(
+                "メモのタイトルを入力してください。"
+            )
 
 
 # =========================================================
 # 作成したメモ
 # =========================================================
 
-st.header("📋 作成したメモ")
+st.divider()
+
+st.subheader("📋 作成したメモ")
 
 
 memos = get_memos()
 
 
+# =========================================================
+# メモがない場合
+# =========================================================
+
 if not memos:
 
     st.info(
         "まだメモがありません。"
-        "上のフォームからメモを作成してください。"
+        "「新しいメモを作成」からメモを作ってください。"
     )
 
 
+# =========================================================
+# メモタイトルボタン
+# =========================================================
+
 else:
 
-    for memo in memos:
+    # 2列で表示
+    # スマホでもタイトルを見つけやすくする
+    for i in range(
+        0,
+        len(memos),
+        2
+    ):
 
-        # =================================================
-        # 1つのメモ
-        # =================================================
+        row_memos = memos[
+            i:i + 2
+        ]
 
-        with st.container(border=True):
-
-            title_col, delete_col = st.columns(
-                [5, 1],
-                vertical_alignment="center"
-            )
-
-
-            # -------------------------------------------------
-            # メモタイトル
-            # -------------------------------------------------
-
-            with title_col:
-
-                st.subheader(
-                    f"📌 {memo['title']}"
-                )
+        cols = st.columns(2)
 
 
-            # -------------------------------------------------
-            # メモ削除
-            # -------------------------------------------------
+        for col, memo in zip(
+            cols,
+            row_memos
+        ):
 
-            with delete_col:
+            with col:
+
+                # -----------------------------------------
+                # 現在開いているメモ
+                # -----------------------------------------
+
+                if (
+                    st.session_state.opened_memo_id
+                    == memo["id"]
+                ):
+
+                    button_text = (
+                        f"🔽 {memo['title']}"
+                    )
+
+                else:
+
+                    button_text = (
+                        f"📝 {memo['title']}"
+                    )
+
+
+                # -----------------------------------------
+                # タイトルボタン
+                # -----------------------------------------
 
                 if st.button(
-                    "🗑️ メモ削除",
-                    key=f"delete_memo_{memo['id']}",
+                    button_text,
+                    key=f"open_memo_{memo['id']}",
                     use_container_width=True
                 ):
 
-                    delete_memo(
-                        memo["id"]
-                    )
+                    # すでに開いている場合
+                    # → 閉じる
+                    if (
+                        st.session_state.opened_memo_id
+                        == memo["id"]
+                    ):
+
+                        st.session_state.opened_memo_id = None
+
+                    # 閉じている場合
+                    # → 開く
+                    else:
+
+                        st.session_state.opened_memo_id = memo["id"]
 
                     st.rerun()
 
 
-            # -------------------------------------------------
-            # 項目追加
-            # -------------------------------------------------
+# =========================================================
+# 選択したメモの中身
+# =========================================================
 
-            st.write("**項目を追加**")
+if st.session_state.opened_memo_id is not None:
+
+    # -----------------------------------------------------
+    # 現在選択されているメモを取得
+    # -----------------------------------------------------
+
+    selected_memo = None
 
 
-            with st.form(
-                key=f"add_item_form_{memo['id']}",
-                clear_on_submit=True
-            ):
+    for memo in get_memos():
 
-                item_col, add_col = st.columns(
-                    [5, 1]
+        if (
+            memo["id"]
+            == st.session_state.opened_memo_id
+        ):
+
+            selected_memo = memo
+
+            break
+
+
+    # -----------------------------------------------------
+    # メモが存在しない場合
+    # -----------------------------------------------------
+
+    if selected_memo is None:
+
+        st.session_state.opened_memo_id = None
+
+        st.rerun()
+
+
+    else:
+
+        st.divider()
+
+        # =================================================
+        # メモタイトル
+        # =================================================
+
+        st.subheader(
+            f"📝 {selected_memo['title']}"
+        )
+
+
+        # =================================================
+        # 項目追加
+        # =================================================
+
+        st.write("**項目を追加**")
+
+
+        with st.form(
+            key=f"add_item_form_{selected_memo['id']}",
+            clear_on_submit=True
+        ):
+
+            item_col, add_col = st.columns(
+                [5, 1]
+            )
+
+
+            # ---------------------------------------------
+            # 項目入力
+            # ---------------------------------------------
+
+            with item_col:
+
+                new_item = st.text_input(
+                    "項目",
+                    placeholder="例：牛乳",
+                    label_visibility="collapsed",
+                    key=f"item_input_{selected_memo['id']}"
                 )
 
 
+            # ---------------------------------------------
+            # 追加ボタン
+            # ---------------------------------------------
+
+            with add_col:
+
+                add_button = st.form_submit_button(
+                    "＋",
+                    use_container_width=True
+                )
+
+
+        # =================================================
+        # 項目追加処理
+        # =================================================
+
+        if add_button:
+
+            item = new_item.strip()
+
+            if item:
+
+                add_memo_item(
+                    selected_memo["id"],
+                    item
+                )
+
+                st.rerun()
+
+            else:
+
+                st.warning(
+                    "項目を入力してください。"
+                )
+
+
+        # =================================================
+        # 項目一覧
+        # =================================================
+
+        st.write("**項目一覧**")
+
+
+        items = get_memo_items(
+            selected_memo["id"]
+        )
+
+
+        if not items:
+
+            st.caption(
+                "まだ項目がありません。"
+            )
+
+
+        else:
+
+            for item in items:
+
+                item_col, delete_col = st.columns(
+                    [5, 1],
+                    vertical_alignment="center"
+                )
+
+
+                # -----------------------------------------
+                # 項目
+                # -----------------------------------------
+
                 with item_col:
 
-                    new_item = st.text_input(
-                        "項目",
-                        placeholder="例：牛乳",
-                        label_visibility="collapsed",
-                        key=f"item_input_{memo['id']}"
+                    st.write(
+                        f"・{item['item']}"
                     )
 
 
-                with add_col:
+                # -----------------------------------------
+                # 項目削除
+                # -----------------------------------------
 
-                    add_button = st.form_submit_button(
-                        "＋ 追加",
+                with delete_col:
+
+                    if st.button(
+                        "✓",
+                        key=f"delete_item_{item['id']}",
                         use_container_width=True
-                    )
+                    ):
 
-
-                if add_button:
-
-                    new_item = new_item.strip()
-
-                    if new_item:
-
-                        add_memo_item(
-                            memo["id"],
-                            new_item
+                        delete_memo_item(
+                            item["id"]
                         )
 
                         st.rerun()
 
-                    else:
 
-                        st.warning(
-                            "項目を入力してください。"
-                        )
+        # =================================================
+        # メモ削除
+        # =================================================
+
+        st.write("")
 
 
-            # -------------------------------------------------
-            # 項目一覧
-            # -------------------------------------------------
+        if st.button(
+            "🗑️ このメモを削除",
+            key=f"delete_selected_memo_{selected_memo['id']}",
+            use_container_width=True
+        ):
 
-            items = get_memo_items(
-                memo["id"]
+            delete_memo(
+                selected_memo["id"]
             )
 
+            # 削除したメモを閉じる
+            st.session_state.opened_memo_id = None
 
-            if items:
-
-                st.write("**項目一覧**")
-
-
-                for item in items:
-
-                    item_col, button_col = st.columns(
-                        [5, 1],
-                        vertical_alignment="center"
-                    )
-
-
-                    with item_col:
-
-                        st.write(
-                            f"・{item['item']}"
-                        )
-
-
-                    with button_col:
-
-                        if st.button(
-                            "✅ 完了・削除",
-                            key=f"delete_item_{item['id']}",
-                            use_container_width=True
-                        ):
-
-                            delete_memo_item(
-                                item["id"]
-                            )
-
-                            st.rerun()
-
-
-            else:
-
-                st.caption(
-                    "まだ項目がありません。"
-                )
-
-
-st.divider()
+            st.rerun()
 
 
 # =========================================================
 # フリーメモ
 # =========================================================
 
-st.header("✏️ フリーメモ")
-
-st.write(
-    "タイトルや項目に分けず、自由に文章を書いて保存できます。"
-)
+st.divider()
 
 
-with st.form(
-    key="free_memo_form",
-    clear_on_submit=True
+with st.expander(
+    "✏️ フリーメモ",
+    expanded=False
 ):
 
-    free_text = st.text_area(
-        "自由にメモ",
-        placeholder=(
-            "例：\n"
-            "明日の会議で確認すること\n"
-            "・資料を確認\n"
-            "・○○さんに連絡\n"
-            "・次回の予定を決める"
-        ),
-        height=180,
-        label_visibility="collapsed",
-        key="free_memo_input"
+    st.caption(
+        "タイトルや項目に分けず、自由に文章を保存できます。"
     )
 
 
-    save_button = st.form_submit_button(
-        "💾 フリーメモを保存",
-        use_container_width=True
-    )
+    # =====================================================
+    # フリーメモ入力
+    # =====================================================
 
+    with st.form(
+        key="free_memo_form",
+        clear_on_submit=True
+    ):
+
+        free_text = st.text_area(
+            "自由にメモ",
+            placeholder=(
+                "ここに自由にメモできます。\n\n"
+                "例：\n"
+                "明日の会議で確認すること\n"
+                "資料を確認する\n"
+                "○○さんに連絡する"
+            ),
+            height=180,
+            label_visibility="collapsed",
+            key="free_memo_input"
+        )
+
+
+        save_button = st.form_submit_button(
+            "💾 フリーメモを保存",
+            use_container_width=True
+        )
+
+
+    # =====================================================
+    # フリーメモ保存処理
+    # =====================================================
 
     if save_button:
 
-        if free_text.strip():
+        content = free_text.strip()
 
-            create_free_memo(
-                free_text.strip()
-            )
+        if content:
+
+            create_free_memo(content)
 
             st.success(
                 "フリーメモを保存しました！"
@@ -559,59 +812,62 @@ with st.form(
             )
 
 
-# =========================================================
-# 保存済みフリーメモ
-# =========================================================
+    # =====================================================
+    # 保存済みフリーメモ
+    # =====================================================
 
-st.subheader("📚 保存したフリーメモ")
-
-
-free_memos = get_free_memos()
+    free_memos = get_free_memos()
 
 
-if not free_memos:
+    if free_memos:
 
-    st.caption(
-        "保存したフリーメモはここに表示されます。"
-    )
+        st.write("**保存したフリーメモ**")
 
 
-else:
+        for free_memo in free_memos:
 
-    for free_memo in free_memos:
+            with st.container(
+                border=True
+            ):
 
-        with st.container(border=True):
-
-            text_col, delete_col = st.columns(
-                [5, 1],
-                vertical_alignment="top"
-            )
-
-
-            with text_col:
-
-                st.write(
-                    free_memo["content"]
-                )
-
-                st.caption(
-                    f"保存日時：{free_memo['created_at']}"
+                text_col, delete_col = st.columns(
+                    [5, 1],
+                    vertical_alignment="top"
                 )
 
 
-            with delete_col:
+                # -----------------------------------------
+                # フリーメモ内容
+                # -----------------------------------------
 
-                if st.button(
-                    "🗑️ 削除",
-                    key=f"delete_free_memo_{free_memo['id']}",
-                    use_container_width=True
-                ):
+                with text_col:
 
-                    delete_free_memo(
-                        free_memo["id"]
+                    st.write(
+                        free_memo["content"]
                     )
 
-                    st.rerun()
+                    st.caption(
+                        f"保存日時：{free_memo['created_at']}"
+                    )
+
+
+                # -----------------------------------------
+                # フリーメモ削除
+                # -----------------------------------------
+
+                with delete_col:
+
+                    if st.button(
+                        "🗑️",
+                        key=f"delete_free_{free_memo['id']}",
+                        use_container_width=True
+                    ):
+
+                        delete_free_memo(
+                            free_memo["id"]
+                        )
+
+                        st.rerun()
 
 
 # =========================================================
@@ -621,5 +877,6 @@ else:
 st.divider()
 
 st.caption(
-    "📝 かんたんメモアプリ ｜ SQLiteでデータを保存しています"
+    "📝 かんたんメモ"
 )
+
