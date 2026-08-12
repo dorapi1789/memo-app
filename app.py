@@ -24,6 +24,10 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* =====================================================
+   全体
+   ===================================================== */
+
 .block-container {
     padding-top: 1.5rem;
     padding-bottom: 3rem;
@@ -54,28 +58,55 @@ h3 {
 
 
 /* =====================================================
-   メモタイトルボタン
+   作成したメモ
    ===================================================== */
 
 /*
-   タイトルボタンは文字数に応じた幅にする。
+   メモタイトルボタン専用。
+   画面いっぱいには伸ばさない。
 */
+
+.memo-title-button {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: 100% !important;
+}
 
 .memo-title-button button {
     width: auto !important;
-    min-width: 90px !important;
-    max-width: 220px !important;
+    min-width: 100px !important;
+    max-width: 260px !important;
+
     padding-left: 14px !important;
     padding-right: 14px !important;
+
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+
+    border-radius: 10px !important;
+}
+
+
+/*
+   メモタイトルの各行。
+   必ず縦に並べる。
+*/
+
+.memo-title-row {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
 }
 
 
 /* =====================================================
    項目行
    ===================================================== */
+
+/*
+   チェック・項目名・削除を横一列にする。
+*/
 
 div[data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap !important;
@@ -90,7 +121,9 @@ div[data-testid="stHorizontalBlock"] {
 .memo-item-text {
     padding-top: 7px;
     padding-bottom: 7px;
+
     width: 100%;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -99,10 +132,13 @@ div[data-testid="stHorizontalBlock"] {
 .memo-item-completed {
     padding-top: 7px;
     padding-bottom: 7px;
+
     width: 100%;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
     text-decoration: line-through;
     opacity: 0.5;
 }
@@ -116,8 +152,10 @@ div[data-testid="stHorizontalBlock"] {
     width: 42px !important;
     min-width: 42px !important;
     max-width: 42px !important;
+
     height: 40px !important;
     min-height: 40px !important;
+
     padding: 0 !important;
     margin: 0 !important;
 }
@@ -131,26 +169,12 @@ div[data-testid="stHorizontalBlock"] {
     width: 46px !important;
     min-width: 46px !important;
     max-width: 46px !important;
+
     height: 44px !important;
     min-height: 44px !important;
+
     padding: 0 !important;
     margin: 0 !important;
-}
-
-
-/* =====================================================
-   メモタイトル一覧
-   ===================================================== */
-
-/*
-   タイトルボタンを横に並べ、
-   必要に応じて次の行へ折り返す。
-*/
-
-.memo-title-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
 }
 
 
@@ -165,61 +189,67 @@ div[data-testid="stHorizontalBlock"] {
         padding-right: 10px;
     }
 
+
     h1 {
         font-size: 1.7rem !important;
     }
 
+
     h2 {
         font-size: 1.3rem !important;
     }
+
 
     h3 {
         font-size: 1.1rem !important;
     }
 
 
-    /* スマホではタイトルボタンをさらにコンパクトに */
+    /* -----------------------------------------------
+       メモタイトル
+       ----------------------------------------------- */
 
     .memo-title-button button {
-        min-width: 75px !important;
-        max-width: 160px !important;
+
+        min-width: 90px !important;
+        max-width: 200px !important;
+
         padding-left: 10px !important;
         padding-right: 10px !important;
+
         font-size: 0.9rem !important;
     }
 
 
-    /* 項目削除ボタン */
+    /* -----------------------------------------------
+       項目削除
+       ----------------------------------------------- */
 
     .item-delete-button button {
+
         width: 38px !important;
         min-width: 38px !important;
         max-width: 38px !important;
+
         height: 38px !important;
         min-height: 38px !important;
     }
 
 
-    /* 項目追加ボタン */
+    /* -----------------------------------------------
+       項目追加
+       ----------------------------------------------- */
 
     .add-item-button button {
+
         width: 44px !important;
         min-width: 44px !important;
         max-width: 44px !important;
+
         height: 42px !important;
         min-height: 42px !important;
     }
 
-}
-
-
-/* =====================================================
-   メモタイトルボタンの親要素
-   ===================================================== */
-
-.memo-button-wrapper {
-    display: inline-block;
-    width: auto;
 }
 
 </style>
@@ -438,15 +468,20 @@ def delete_memo(memo_id):
     conn = get_connection()
     cursor = conn.cursor()
 
+
+    # メモの項目を削除
     cursor.execute("""
         DELETE FROM memo_items
         WHERE memo_id = ?
     """, (memo_id,))
 
+
+    # メモ本体を削除
     cursor.execute("""
         DELETE FROM memos
         WHERE id = ?
     """, (memo_id,))
+
 
     conn.commit()
     conn.close()
@@ -480,7 +515,7 @@ def add_memo_item(memo_id, item):
 
 
 # =========================================================
-# 項目チェック状態変更
+# チェック状態変更
 # =========================================================
 
 def update_item_completed(item_id, completed):
@@ -582,7 +617,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモを作成
+# 新しいメモ作成
 # =========================================================
 
 with st.expander(
@@ -641,6 +676,10 @@ st.subheader("📋 作成したメモ")
 memos = get_memos()
 
 
+# =========================================================
+# メモがない場合
+# =========================================================
+
 if not memos:
 
     st.info(
@@ -649,90 +688,87 @@ if not memos:
     )
 
 
+# =========================================================
+# メモタイトルを縦一列で表示
+# =========================================================
+
 else:
 
-    # =====================================================
-    # タイトルボタンを並べる
-    # =====================================================
+    for memo in memos:
 
-    for i in range(
-        0,
-        len(memos),
-        3
-    ):
+        # =================================================
+        # 1メモにつき1行
+        # =================================================
 
-        row_memos = memos[
-            i:i + 3
-        ]
-
-
-        # 最大3つを横に並べる
-        cols = st.columns(
-            len(row_memos)
+        st.markdown(
+            '<div class="memo-title-row">',
+            unsafe_allow_html=True
         )
 
 
-        for col, memo in zip(
-            cols,
-            row_memos
+        # -------------------------------------------------
+        # 開いているかどうかでアイコンを変更
+        # -------------------------------------------------
+
+        if (
+            st.session_state.opened_memo_id
+            == memo["id"]
         ):
 
-            with col:
+            button_text = (
+                f"🔽 {memo['title']}"
+            )
 
-                if (
-                    st.session_state.opened_memo_id
-                    == memo["id"]
-                ):
+        else:
 
-                    button_text = (
-                        f"🔽 {memo['title']}"
-                    )
-
-                else:
-
-                    button_text = (
-                        f"📝 {memo['title']}"
-                    )
+            button_text = (
+                f"📝 {memo['title']}"
+            )
 
 
-                # -------------------------------------------------
-                # タイトルボタン
-                # -------------------------------------------------
-                #
-                # use_container_width=True を使わない
-                # ことで画面いっぱいに伸びるのを防ぐ。
-                #
-                # -------------------------------------------------
+        # -------------------------------------------------
+        # タイトルボタン
+        # -------------------------------------------------
+        #
+        # use_container_width=True は使用しない。
+        # これによって画面いっぱいに伸びるのを防ぐ。
+        #
 
-                st.markdown(
-                    '<div class="memo-title-button">',
-                    unsafe_allow_html=True
-                )
-
-
-                if st.button(
-                    button_text,
-                    key=f"open_memo_{memo['id']}"
-                ):
-
-                    if (
-                        st.session_state.opened_memo_id
-                        == memo["id"]
-                    ):
-
-                        st.session_state.opened_memo_id = None
-
-                    else:
-
-                        st.session_state.opened_memo_id = memo["id"]
-
-                    st.rerun()
+        st.markdown(
+            '<div class="memo-title-button">',
+            unsafe_allow_html=True
+        )
 
 
-                st.markdown(
-                    '</div>',
-                    unsafe_allow_html=True
-                )
+        if st.button(
+            button_text,
+            key=f"open_memo_{memo['id']}"
+        ):
+
+            if (
+                st.session_state.opened_memo_id
+                == memo["id"]
+            ):
+
+                st.session_state.opened_memo_id = None
+
+            else:
+
+                st.session_state.opened_memo_id = memo["id"]
+
+            st.rerun()
+
+
+        st.markdown(
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+
+        st.markdown(
+            '</div>',
+            unsafe_allow_html=True
+        )
 
 
 # =========================================================
@@ -757,7 +793,7 @@ if st.session_state.opened_memo_id is not None:
 
 
     # -----------------------------------------------------
-    # メモが存在しない場合
+    # メモが削除されていた場合
     # -----------------------------------------------------
 
     if selected_memo is None:
@@ -872,15 +908,11 @@ if st.session_state.opened_memo_id is not None:
 
         else:
 
-            # =================================================
-            # 項目
-            # =================================================
-
             for item in items:
 
-                # -------------------------------------------------
+                # =================================================
                 # チェック → 項目名 → 削除
-                # -------------------------------------------------
+                # =================================================
 
                 with st.container(
                     horizontal=True,
@@ -889,7 +921,7 @@ if st.session_state.opened_memo_id is not None:
                 ):
 
                     # ---------------------------------------------
-                    # チェック
+                    # 左：チェック
                     # ---------------------------------------------
 
                     checked = st.checkbox(
@@ -901,7 +933,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                     # ---------------------------------------------
-                    # 項目名
+                    # 中央：項目名
                     # ---------------------------------------------
 
                     safe_item = html.escape(
@@ -933,7 +965,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                     # ---------------------------------------------
-                    # 削除
+                    # 右：削除
                     # ---------------------------------------------
 
                     st.markdown(
@@ -961,9 +993,9 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                # ---------------------------------------------
+                # =================================================
                 # チェック状態変更
-                # ---------------------------------------------
+                # =================================================
 
                 if checked != bool(item["completed"]):
 
@@ -1013,10 +1045,6 @@ with st.expander(
         "タイトルや項目に分けず、自由に文章を保存できます。"
     )
 
-
-    # =====================================================
-    # フリーメモ入力
-    # =====================================================
 
     with st.form(
         key="free_memo_form",
