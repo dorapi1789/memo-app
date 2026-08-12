@@ -17,7 +17,7 @@ st.set_page_config(
 
 
 # =========================================================
-# スマホ向けデザイン
+# CSS
 # =========================================================
 
 st.markdown("""
@@ -41,32 +41,39 @@ h3 {
     font-size: 1.1rem !important;
 }
 
-/* チェックボックス */
-[data-testid="stCheckbox"] {
-    padding-top: 0.25rem;
-}
 
-/* 削除ボタンを小さくする */
-.small-delete-button button {
-    min-height: 32px !important;
-    height: 32px !important;
-    width: 40px !important;
-    padding: 0 !important;
-    font-size: 0.9rem !important;
-}
+/* =====================================================
+   メモタイトルボタン
+   ===================================================== */
 
-/* 通常のボタン */
 .stButton button {
     min-height: 44px;
     border-radius: 10px;
 }
 
-/* スマホ */
+
+/* =====================================================
+   項目行
+   ===================================================== */
+
+.item-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 6px;
+}
+
+
+/* =====================================================
+   スマホ
+   ===================================================== */
+
 @media (max-width: 600px) {
 
     .block-container {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     h1 {
@@ -116,6 +123,7 @@ def init_database():
     conn = get_connection()
     cursor = conn.cursor()
 
+
     # -----------------------------------------------------
     # メモ
     # -----------------------------------------------------
@@ -127,6 +135,7 @@ def init_database():
             created_at TEXT NOT NULL
         )
     """)
+
 
     # -----------------------------------------------------
     # メモ項目
@@ -142,9 +151,9 @@ def init_database():
         )
     """)
 
+
     # -----------------------------------------------------
-    # 既に作成済みのmemo_itemsに
-    # completedカラムがない場合は追加する
+    # 既存データに completed がない場合
     # -----------------------------------------------------
 
     cursor.execute("""
@@ -156,12 +165,14 @@ def init_database():
         for row in cursor.fetchall()
     ]
 
+
     if "completed" not in columns:
 
         cursor.execute("""
             ALTER TABLE memo_items
             ADD COLUMN completed INTEGER NOT NULL DEFAULT 0
         """)
+
 
     # -----------------------------------------------------
     # フリーメモ
@@ -174,6 +185,7 @@ def init_database():
             created_at TEXT NOT NULL
         )
     """)
+
 
     conn.commit()
     conn.close()
@@ -208,7 +220,7 @@ def get_memos():
 
 
 # =========================================================
-# メモ項目取得
+# 項目取得
 # =========================================================
 
 def get_memo_items(memo_id):
@@ -216,7 +228,6 @@ def get_memo_items(memo_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # 未完了を上、完了済みを下に表示
     cursor.execute("""
         SELECT
             id,
@@ -299,17 +310,20 @@ def delete_memo(memo_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # メモに紐づいている項目も削除
+
+    # メモの項目を削除
     cursor.execute("""
         DELETE FROM memo_items
         WHERE memo_id = ?
     """, (memo_id,))
+
 
     # メモ本体を削除
     cursor.execute("""
         DELETE FROM memos
         WHERE id = ?
     """, (memo_id,))
+
 
     conn.commit()
     conn.close()
@@ -445,7 +459,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモを作成
+# 新しいメモ作成
 # =========================================================
 
 with st.expander(
@@ -464,10 +478,12 @@ with st.expander(
             key="new_memo_title"
         )
 
+
         create_button = st.form_submit_button(
             "＋ メモを作成",
             use_container_width=True
         )
+
 
     if create_button:
 
@@ -532,6 +548,7 @@ else:
 
         cols = st.columns(2)
 
+
         for col, memo in zip(
             cols,
             row_memos
@@ -554,6 +571,7 @@ else:
                         f"📝 {memo['title']}"
                     )
 
+
                 if st.button(
                     button_text,
                     key=f"open_memo_{memo['id']}",
@@ -575,12 +593,13 @@ else:
 
 
 # =========================================================
-# 選択したメモの中身
+# 選択したメモ
 # =========================================================
 
 if st.session_state.opened_memo_id is not None:
 
     selected_memo = None
+
 
     for memo in get_memos():
 
@@ -595,7 +614,7 @@ if st.session_state.opened_memo_id is not None:
 
 
     # -----------------------------------------------------
-    # メモが存在しない場合
+    # メモが削除されている場合
     # -----------------------------------------------------
 
     if selected_memo is None:
@@ -608,6 +627,7 @@ if st.session_state.opened_memo_id is not None:
     else:
 
         st.divider()
+
 
         # =================================================
         # メモタイトル
@@ -624,6 +644,7 @@ if st.session_state.opened_memo_id is not None:
 
         st.write("**項目を追加**")
 
+
         with st.form(
             key=f"add_item_form_{selected_memo['id']}",
             clear_on_submit=True
@@ -633,6 +654,7 @@ if st.session_state.opened_memo_id is not None:
                 [5, 1]
             )
 
+
             with item_col:
 
                 new_item = st.text_input(
@@ -641,6 +663,7 @@ if st.session_state.opened_memo_id is not None:
                     label_visibility="collapsed",
                     key=f"item_input_{selected_memo['id']}"
                 )
+
 
             with add_col:
 
@@ -680,6 +703,7 @@ if st.session_state.opened_memo_id is not None:
 
         st.write("**項目一覧**")
 
+
         items = get_memo_items(
             selected_memo["id"]
         )
@@ -694,25 +718,33 @@ if st.session_state.opened_memo_id is not None:
 
         else:
 
+            # -------------------------------------------------
+            # 項目を1つずつ表示
+            # -------------------------------------------------
+
             for item in items:
 
-                # -------------------------------------------------
-                # 1つの項目につき
+                # =================================================
+                # ここが重要
                 #
-                # 左：チェックボックス
-                # 中央：項目名
-                # 右：削除ボタン
-                # -------------------------------------------------
+                # チェック
+                # ↓
+                # 項目名
+                # ↓
+                # 削除
+                #
+                # を必ず横1列にする
+                # =================================================
 
                 check_col, text_col, delete_col = st.columns(
-                    [1, 7, 1],
+                    [0.8, 7.2, 1],
                     vertical_alignment="center"
                 )
 
 
-                # ---------------------------------------------
-                # 左側：チェックボックス
-                # ---------------------------------------------
+                # -------------------------------------------------
+                # 左：チェックボックス
+                # -------------------------------------------------
 
                 with check_col:
 
@@ -724,9 +756,9 @@ if st.session_state.opened_memo_id is not None:
                     )
 
 
-                # ---------------------------------------------
-                # チェック状態が変更された場合
-                # ---------------------------------------------
+                # -------------------------------------------------
+                # チェック状態が変わった場合
+                # -------------------------------------------------
 
                 if checked != bool(item["completed"]):
 
@@ -738,28 +770,36 @@ if st.session_state.opened_memo_id is not None:
                     st.rerun()
 
 
-                # ---------------------------------------------
+                # -------------------------------------------------
                 # 中央：項目名
-                # ---------------------------------------------
+                # -------------------------------------------------
 
                 with text_col:
 
                     if item["completed"]:
 
                         st.markdown(
-                            f"~~{item['item']}~~"
+                            f"<div style='padding-top:8px; "
+                            f"text-decoration:line-through; "
+                            f"opacity:0.55;'>"
+                            f"{item['item']}"
+                            f"</div>",
+                            unsafe_allow_html=True
                         )
 
                     else:
 
-                        st.write(
-                            item["item"]
+                        st.markdown(
+                            f"<div style='padding-top:8px;'>"
+                            f"{item['item']}"
+                            f"</div>",
+                            unsafe_allow_html=True
                         )
 
 
-                # ---------------------------------------------
-                # 右側：削除ボタン
-                # ---------------------------------------------
+                # -------------------------------------------------
+                # 右：削除ボタン
+                # -------------------------------------------------
 
                 with delete_col:
 
@@ -781,6 +821,7 @@ if st.session_state.opened_memo_id is not None:
         # =================================================
 
         st.write("")
+
 
         if st.button(
             "🗑️ このメモを削除",
@@ -833,11 +874,16 @@ with st.expander(
             key="free_memo_input"
         )
 
+
         save_button = st.form_submit_button(
             "💾 フリーメモを保存",
             use_container_width=True
         )
 
+
+    # =====================================================
+    # フリーメモ保存
+    # =====================================================
 
     if save_button:
 
