@@ -76,6 +76,8 @@ div[data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap !important;
 
     overflow: hidden !important;
+
+    align-items: center !important;
 }
 
 
@@ -150,9 +152,10 @@ div[data-testid="element-container"]:has(
     overflow-wrap: anywhere !important;
 
     display: flex !important;
+
     align-items: center !important;
 
-    min-height: 36px !important;
+    min-height: 40px !important;
 }
 
 
@@ -171,38 +174,48 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
+    height: 40px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     display: flex !important;
 
     align-items: center !important;
 
     justify-content: center !important;
-
-    height: 36px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 
-/*
-   Streamlitのチェックボックス内部の余白を調整
-*/
-
 .item-check div[data-testid="stCheckbox"] {
-    width: 100% !important;
+    width: 40px !important;
 
-    min-width: 0 !important;
+    min-width: 40px !important;
+
+    height: 40px !important;
 
     margin: 0 !important;
 
     padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
 }
 
 
 .item-check div[data-testid="stCheckbox"] > label {
-    width: 100% !important;
+    width: 40px !important;
 
-    min-width: 0 !important;
+    min-width: 40px !important;
+
+    height: 40px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
 
     display: flex !important;
 
@@ -210,14 +223,29 @@ div[data-testid="element-container"]:has(
 
     justify-content: center !important;
 
+    cursor: pointer !important;
+}
+
+
+.item-check input[type="checkbox"] {
+    width: 26px !important;
+
+    height: 26px !important;
+
+    min-width: 26px !important;
+
+    min-height: 26px !important;
+
     margin: 0 !important;
 
     padding: 0 !important;
+
+    cursor: pointer !important;
 }
 
 
 /* =========================================================
-   削除ボタン
+   ★ ごみ箱ボタン
    ========================================================= */
 
 .item-delete {
@@ -225,31 +253,36 @@ div[data-testid="element-container"]:has(
 
     min-width: 0 !important;
 
+    height: 40px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
     display: flex !important;
 
     align-items: center !important;
 
     justify-content: center !important;
-
-    height: 36px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 
+/*
+   Streamlitのボタン全体
+*/
+
 .item-delete button {
-    width: 34px !important;
+    width: 36px !important;
 
-    min-width: 34px !important;
+    min-width: 36px !important;
 
-    max-width: 34px !important;
+    max-width: 36px !important;
 
-    height: 34px !important;
+    height: 36px !important;
 
-    min-height: 34px !important;
+    min-height: 36px !important;
 
-    max-height: 34px !important;
+    max-height: 36px !important;
 
     padding: 0 !important;
 
@@ -260,13 +293,59 @@ div[data-testid="element-container"]:has(
     align-items: center !important;
 
     justify-content: center !important;
+
+    text-align: center !important;
+
+    line-height: 1 !important;
 
     overflow: hidden !important;
 }
 
 
+/*
+   ボタン内部のすべての要素を中央揃え
+*/
+
+.item-delete button > div {
+    width: 100% !important;
+
+    height: 100% !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+}
+
+
+.item-delete button p {
+    width: 100% !important;
+
+    height: 100% !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    line-height: 1 !important;
+
+    text-align: center !important;
+}
+
+
 /* =========================================================
-   項目追加欄
+   項目追加入力
    ========================================================= */
 
 .add-input {
@@ -295,6 +374,8 @@ div[data-testid="element-container"]:has(
     min-width: 0 !important;
 
     display: flex !important;
+
+    align-items: center !important;
 
     justify-content: center !important;
 }
@@ -345,10 +426,6 @@ div[data-testid="element-container"]:has(
     }
 
 
-    /*
-       項目行の左右余白を最小限にする
-    */
-
     div[data-testid="stHorizontalBlock"] {
         gap: 4px !important;
     }
@@ -385,10 +462,7 @@ def init_database():
     cursor = conn.cursor()
 
 
-    # -----------------------------------------------------
     # メモ
-    # -----------------------------------------------------
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -398,10 +472,7 @@ def init_database():
     """)
 
 
-    # -----------------------------------------------------
     # 項目
-    # -----------------------------------------------------
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memo_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -413,10 +484,7 @@ def init_database():
     """)
 
 
-    # -----------------------------------------------------
-    # 古いデータベースへの対応
-    # -----------------------------------------------------
-
+    # 古いDBへの対応
     cursor.execute("""
         PRAGMA table_info(memo_items)
     """)
@@ -436,10 +504,7 @@ def init_database():
         """)
 
 
-    # -----------------------------------------------------
     # フリーメモ
-    # -----------------------------------------------------
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS free_memos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -1008,22 +1073,18 @@ if st.session_state.opened_memo_id is not None:
             for item in items:
 
                 # =================================================
-                # ここが今回の重要部分
-                #
-                # チェック | 項目名 | 削除
-                #
-                # 3つとも縦方向中央揃え
+                # チェック | 項目 | ごみ箱
                 # =================================================
 
                 check_col, text_col, delete_col = st.columns(
-                    [0.75, 8.0, 0.85],
+                    [0.9, 7.8, 0.95],
                     gap="small",
                     vertical_alignment="center"
                 )
 
 
                 # -------------------------------------------------
-                # チェックマーク
+                # チェックボックス
                 # -------------------------------------------------
 
                 with check_col:
@@ -1083,7 +1144,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # -------------------------------------------------
-                # 削除ボタン
+                # ごみ箱ボタン
                 # -------------------------------------------------
 
                 with delete_col:
@@ -1114,7 +1175,7 @@ if st.session_state.opened_memo_id is not None:
 
 
                 # -------------------------------------------------
-                # チェック状態が変わった場合
+                # チェック状態変更
                 # -------------------------------------------------
 
                 if checked != bool(item["completed"]):
@@ -1261,4 +1322,3 @@ with st.expander(
 st.divider()
 
 st.caption("📝 かんたんメモ")
-
