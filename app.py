@@ -17,7 +17,7 @@ st.set_page_config(
 
 
 # =========================================================
-# スマホ用CSS
+# CSS
 # =========================================================
 
 st.markdown("""
@@ -35,11 +35,7 @@ body {
     overflow-x: hidden !important;
 }
 
-[data-testid="stAppViewContainer"] {
-    width: 100% !important;
-    overflow-x: hidden !important;
-}
-
+[data-testid="stAppViewContainer"],
 [data-testid="stAppViewBlockContainer"] {
     width: 100% !important;
     max-width: 100% !important;
@@ -61,7 +57,7 @@ body {
 
 
 /* =========================================================
-   横並び
+   Streamlitの横並び
    ========================================================= */
 
 div[data-testid="stHorizontalBlock"] {
@@ -73,6 +69,8 @@ div[data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap !important;
 
     align-items: center !important;
+
+    gap: 3px !important;
 
     overflow: visible !important;
 }
@@ -101,7 +99,6 @@ div[data-testid="stHorizontalBlock"] > div {
     max-width: calc(100vw - 25px) !important;
 
     height: 38px !important;
-    min-height: 38px !important;
 
     padding: 4px 12px !important;
 
@@ -116,26 +113,49 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   項目行
+   項目名
    ========================================================= */
 
-.item-row {
+.memo-text {
     width: 100% !important;
 
     min-width: 0 !important;
 
-    height: 52px !important;
+    min-height: 48px !important;
+
+    margin: 0 !important;
+
+    padding: 8px 4px 2px 4px !important;
+
+    font-size: 15px !important;
+
+    line-height: 1.45 !important;
 
     display: flex !important;
 
     align-items: center !important;
 
-    overflow: visible !important;
+    /*
+       項目名を少し下に配置
+    */
+    transform: translateY(3px) !important;
+
+    word-break: break-word !important;
+
+    overflow-wrap: anywhere !important;
+
+    white-space: normal !important;
+}
+
+.memo-text.completed {
+    text-decoration: line-through !important;
+
+    opacity: 0.45 !important;
 }
 
 
 /* =========================================================
-   チェックボックス
+   ★ チェックボックス
    ========================================================= */
 
 .item-check {
@@ -154,21 +174,21 @@ div[data-testid="stHorizontalBlock"] > div {
 
     justify-content: center !important;
 
-    /* チェックボックスを少し上へ */
+    /*
+       チェックボックスを少し上に
+    */
     transform: translateY(-5px) !important;
 }
 
 
-/* =========================================================
-   チェックボックス外側
-   ========================================================= */
+/* チェックボックスの外側 */
 
 .item-check div[data-testid="stCheckbox"] {
-    width: 54px !important;
+    width: 52px !important;
 
-    min-width: 54px !important;
+    min-width: 52px !important;
 
-    height: 54px !important;
+    height: 52px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -181,16 +201,14 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   チェックボックス label
-   ========================================================= */
+/* label */
 
 .item-check div[data-testid="stCheckbox"] > label {
-    width: 54px !important;
+    width: 52px !important;
 
-    min-width: 54px !important;
+    min-width: 52px !important;
 
-    height: 54px !important;
+    height: 52px !important;
 
     margin: 0 !important;
 
@@ -207,21 +225,21 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   チェックボックス本体
+   ★ チェックボックス本体
    ========================================================= */
 
 .item-check input[type="checkbox"] {
     appearance: none !important;
     -webkit-appearance: none !important;
 
-    width: 50px !important;
-    height: 50px !important;
+    width: 42px !important;
+    height: 42px !important;
 
-    min-width: 50px !important;
-    min-height: 50px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
 
-    max-width: 50px !important;
-    max-height: 50px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -277,9 +295,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   Streamlit側の余白を削除
-   ========================================================= */
+/* Streamlit側の余白 */
 
 .item-check div[data-testid="stCheckbox"] > label > div {
     margin: 0 !important;
@@ -288,57 +304,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   ★ 項目名
-   ========================================================= */
-
-.memo-text {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    min-height: 48px !important;
-
-    margin: 0 !important;
-
-    /*
-       項目名を少し下へ
-    */
-    padding: 8px 4px 2px 4px !important;
-
-    font-size: 15px !important;
-
-    line-height: 1.45 !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-
-    /*
-       ★ 項目名だけ3px下へ
-    */
-    transform: translateY(3px) !important;
-
-    word-break: break-word !important;
-
-    overflow-wrap: anywhere !important;
-
-    white-space: normal !important;
-}
-
-
-/* =========================================================
-   完了した項目
-   ========================================================= */
-
-.memo-text.completed {
-    text-decoration: line-through !important;
-
-    opacity: 0.45 !important;
-}
-
-
-/* =========================================================
-   削除ボタン
+   ★ 削除ボタン
    ========================================================= */
 
 .item-delete {
@@ -361,9 +327,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   削除ボタン本体
-   ========================================================= */
+/* 削除ボタン本体 */
 
 .item-delete button {
     width: 62px !important;
@@ -398,9 +362,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   削除ボタン内部
-   ========================================================= */
+/* 削除ボタン内部 */
 
 .item-delete button > div {
     width: 100% !important;
@@ -421,9 +383,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   「削除」の文字
-   ========================================================= */
+/* 削除の文字 */
 
 .item-delete button p {
     width: 100% !important;
@@ -453,7 +413,7 @@ div[data-testid="stHorizontalBlock"] > div {
 
 
 /* =========================================================
-   項目追加エリア
+   項目追加
    ========================================================= */
 
 .add-input {
@@ -475,9 +435,7 @@ div[data-testid="stHorizontalBlock"] > div {
 }
 
 
-/* =========================================================
-   ＋ボタン
-   ========================================================= */
+/* ＋ボタン */
 
 .add-button {
     width: 100% !important;
@@ -519,10 +477,6 @@ div[data-testid="stHorizontalBlock"] > div {
     align-items: center !important;
 
     justify-content: center !important;
-
-    text-align: center !important;
-
-    line-height: 1 !important;
 }
 
 
@@ -537,16 +491,9 @@ div[data-testid="stHorizontalBlock"] > div {
         padding-right: 8px !important;
     }
 
-    div[data-testid="stHorizontalBlock"] {
-        gap: 3px !important;
-    }
-
     .memo-text {
         font-size: 15px !important;
 
-        /*
-           スマホでも項目名を少し下へ
-        */
         transform: translateY(3px) !important;
     }
 
@@ -573,24 +520,15 @@ DB_NAME = "memo_app.db"
 
 
 def get_connection():
-
     conn = sqlite3.connect(DB_NAME)
-
     conn.row_factory = sqlite3.Row
-
     return conn
 
-
-# =========================================================
-# DB初期化
-# =========================================================
 
 def init_database():
 
     conn = get_connection()
-
     cursor = conn.cursor()
-
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memos (
@@ -599,7 +537,6 @@ def init_database():
             created_at TEXT NOT NULL
         )
     """)
-
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS memo_items (
@@ -611,17 +548,14 @@ def init_database():
         )
     """)
 
-
     cursor.execute("""
         PRAGMA table_info(memo_items)
     """)
-
 
     columns = [
         row["name"]
         for row in cursor.fetchall()
     ]
-
 
     if "completed" not in columns:
 
@@ -629,7 +563,6 @@ def init_database():
             ALTER TABLE memo_items
             ADD COLUMN completed INTEGER NOT NULL DEFAULT 0
         """)
-
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS free_memos (
@@ -639,9 +572,7 @@ def init_database():
         )
     """)
 
-
     conn.commit()
-
     conn.close()
 
 
@@ -649,13 +580,12 @@ init_database()
 
 
 # =========================================================
-# データ取得
+# メモ取得
 # =========================================================
 
 def get_memos():
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -674,7 +604,6 @@ def get_memos():
 def get_memo_items(memo_id):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -699,7 +628,6 @@ def get_memo_items(memo_id):
 def get_free_memos():
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -716,13 +644,12 @@ def get_free_memos():
 
 
 # =========================================================
-# メモ関連
+# メモ作成・削除
 # =========================================================
 
 def create_memo(title):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -737,14 +664,12 @@ def create_memo(title):
     ))
 
     conn.commit()
-
     conn.close()
 
 
 def delete_memo(memo_id):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -758,7 +683,6 @@ def delete_memo(memo_id):
     """, (memo_id,))
 
     conn.commit()
-
     conn.close()
 
 
@@ -769,7 +693,6 @@ def delete_memo(memo_id):
 def add_memo_item(memo_id, item):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -787,14 +710,12 @@ def add_memo_item(memo_id, item):
     ))
 
     conn.commit()
-
     conn.close()
 
 
 def update_item_completed(item_id, completed):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -807,14 +728,12 @@ def update_item_completed(item_id, completed):
     ))
 
     conn.commit()
-
     conn.close()
 
 
 def delete_memo_item(item_id):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -823,18 +742,16 @@ def delete_memo_item(item_id):
     """, (item_id,))
 
     conn.commit()
-
     conn.close()
 
 
 # =========================================================
-# フリーメモ関連
+# フリーメモ
 # =========================================================
 
 def create_free_memo(content):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -849,14 +766,12 @@ def create_free_memo(content):
     ))
 
     conn.commit()
-
     conn.close()
 
 
 def delete_free_memo(memo_id):
 
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -865,7 +780,6 @@ def delete_free_memo(memo_id):
     """, (memo_id,))
 
     conn.commit()
-
     conn.close()
 
 
@@ -874,7 +788,6 @@ def delete_free_memo(memo_id):
 # =========================================================
 
 if "opened_memo_id" not in st.session_state:
-
     st.session_state.opened_memo_id = None
 
 
@@ -890,7 +803,7 @@ st.caption(
 
 
 # =========================================================
-# 新しいメモ
+# 新しいメモを作成
 # =========================================================
 
 with st.expander(
@@ -1010,7 +923,6 @@ if st.session_state.opened_memo_id is not None:
 
     selected_memo = None
 
-
     for memo in get_memos():
 
         if (
@@ -1019,14 +931,12 @@ if st.session_state.opened_memo_id is not None:
         ):
 
             selected_memo = memo
-
             break
 
 
     if selected_memo is None:
 
         st.session_state.opened_memo_id = None
-
         st.rerun()
 
 
@@ -1138,42 +1048,14 @@ if st.session_state.opened_memo_id is not None:
             for item in items:
 
                 # =================================================
-                # 3列を横一列に固定
-                #
-                # チェック | 項目名 | 削除
+                # ★ 項目名 → チェック → 削除
                 # =================================================
 
-                check_col, text_col, delete_col = st.columns(
-                    [1.25, 6.75, 1.5],
+                text_col, check_col, delete_col = st.columns(
+                    [6.75, 1.5, 1.75],
                     gap="small",
                     vertical_alignment="center"
                 )
-
-
-                # ---------------------------------------------
-                # チェック
-                # ---------------------------------------------
-
-                with check_col:
-
-                    st.markdown(
-                        '<div class="item-check">',
-                        unsafe_allow_html=True
-                    )
-
-
-                    checked = st.checkbox(
-                        "完了",
-                        value=bool(item["completed"]),
-                        key=f"check_{item['id']}",
-                        label_visibility="collapsed"
-                    )
-
-
-                    st.markdown(
-                        '</div>',
-                        unsafe_allow_html=True
-                    )
 
 
                 # ---------------------------------------------
@@ -1208,6 +1090,32 @@ if st.session_state.opened_memo_id is not None:
                             """,
                             unsafe_allow_html=True
                         )
+
+
+                # ---------------------------------------------
+                # ★ 大きいチェックボックス
+                # ---------------------------------------------
+
+                with check_col:
+
+                    st.markdown(
+                        '<div class="item-check">',
+                        unsafe_allow_html=True
+                    )
+
+
+                    checked = st.checkbox(
+                        "完了",
+                        value=bool(item["completed"]),
+                        key=f"check_{item['id']}",
+                        label_visibility="collapsed"
+                    )
+
+
+                    st.markdown(
+                        '</div>',
+                        unsafe_allow_html=True
+                    )
 
 
                 # ---------------------------------------------
@@ -1259,7 +1167,7 @@ if st.session_state.opened_memo_id is not None:
 
 
         # =================================================
-        # メモ削除
+        # メモそのものを削除
         # =================================================
 
         st.write("")
